@@ -3,13 +3,14 @@ package WizardGameTheWar;
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.Tiles.Tile;
+import WizardGameTheWar.GameObjects.*;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 
 
-public class Game implements Runnable, MouseListener, MouseMotionListener, KeyListener
+public class Game implements Runnable
 {
     private GameWindow      wnd;        /*!< Fereastra in care se va desena tabla jocului*/
     private boolean         runState;   /*!< Flag ce starea firului de executie.*/
@@ -56,9 +57,6 @@ public class Game implements Runnable, MouseListener, MouseMotionListener, KeyLi
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
         player = new Player(0);
-        wnd.GetCanvas().addKeyListener(this);
-        wnd.GetCanvas().addMouseListener(this);
-        wnd.GetCanvas().addMouseMotionListener(this);
     }
 
     /*! \fn public void run()
@@ -159,7 +157,18 @@ public class Game implements Runnable, MouseListener, MouseMotionListener, KeyLi
      */
     private void Update()
     {
-
+        if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
+            player.x += 5;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
+            player.x -= 5;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
+            player.y -= 5;
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
+            player.y += 5;
+        }
     }
 
     /*! \fn private void Draw()
@@ -217,67 +226,6 @@ public class Game implements Runnable, MouseListener, MouseMotionListener, KeyLi
             /// Elibereaza resursele de memorie aferente contextului grafic curent (zonele de memorie ocupate de
             /// elementele grafice ce au fost desenate pe canvas).
         g.dispose();
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode() == KeyEvent.VK_D)
-            player.x += 5;
-        if(e.getKeyCode() == KeyEvent.VK_W)
-            player.y -= 5;
-        if(e.getKeyCode() == KeyEvent.VK_A)
-            player.x -= 5;
-        if(e.getKeyCode() == KeyEvent.VK_S)
-            player.y += 5;
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        int x = e.getX();
-        int y = e.getY();
-
-        // Do something with the mouse position
-        //System.out.println("Mouse position: (" + x + ", " + y + ")");
     }
 }
 
