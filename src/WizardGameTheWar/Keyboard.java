@@ -23,7 +23,7 @@ public class Keyboard {
     /**
      * Verifica daca o tasta este apasata
      * @param keyCode codul intern al tastei din clasa {@link java.awt.event.KeyEvent}
-     * @return Daca tasta data ete apasata
+     * @return Daca tasta data este apasata
      */
     public static boolean isKeyPressed(int keyCode) { // Any key code from the KeyEvent class
         return pressedKeys.getOrDefault(keyCode, false);
