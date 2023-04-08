@@ -5,6 +5,8 @@ import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.GameObjects.*;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
@@ -16,7 +18,6 @@ public class Game implements Runnable
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
     private BufferStrategy  bs;         /*!< Referinta catre un mecanism cu care se organizeaza memoria complexa pentru un canvas.*/
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
-    ArrayList<GameObject> gameObjects;
 
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
@@ -36,7 +37,6 @@ public class Game implements Runnable
             /// Acest lucru va fi realizat in metoda init() prin apelul
             /// functiei BuildGameWindow();
         wnd = new GameWindow(title, width, height);
-        gameObjects = new ArrayList<GameObject>();
 
             /// Resetarea flagului runState ce indica starea firului de executie (started/stoped)
         runState = false;
@@ -67,6 +67,9 @@ public class Game implements Runnable
         GameObjectManager.spawn(new Player(12, 12));
         GameObjectManager.spawn(new ObstacleBoulder(48,48*2));
         GameObjectManager.spawn(new ObstacleBoulder(48,48*3));
+
+        Mouse.canvas = wnd.GetCanvas();
+        Mouse.addMouseListener();
     }
 
     /*! \fn public void run()
@@ -170,6 +173,10 @@ public class Game implements Runnable
         GameObjectManager.updateObjects();
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
+        }
+
+        if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
+            System.out.println("CLIIIIIIIIIIIIIIIIIIICK at" + Mouse.getPosition());
         }
     }
 
