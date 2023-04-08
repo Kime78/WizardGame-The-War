@@ -2,12 +2,11 @@ package WizardGameTheWar;
 
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
-import WizardGameTheWar.Tiles.Tile;
 import WizardGameTheWar.GameObjects.*;
 
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 
 public class Game implements Runnable
@@ -17,8 +16,9 @@ public class Game implements Runnable
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
     private BufferStrategy  bs;         /*!< Referinta catre un mecanism cu care se organizeaza memoria complexa pentru un canvas.*/
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
-    Player player;
-    private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
+    ArrayList<GameObject> gameObjects;
+
+    //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
     /*! \fn public Game(String title, int width, int height)
         \brief Constructor de initializare al clasei Game.
@@ -36,9 +36,11 @@ public class Game implements Runnable
             /// Acest lucru va fi realizat in metoda init() prin apelul
             /// functiei BuildGameWindow();
         wnd = new GameWindow(title, width, height);
+        gameObjects = new ArrayList<GameObject>();
 
             /// Resetarea flagului runState ce indica starea firului de executie (started/stoped)
         runState = false;
+        GameObjectManager.init();
     }
 
     /*! \fn private void init()
@@ -50,13 +52,21 @@ public class Game implements Runnable
      */
     private void InitGame()
     {
-
         wnd = new GameWindow("WizardGame: The war", 800, 600);
             /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        player = new Player(0);
+        for(int i = 0 ; i <= wnd.GetWndWidth() / 48; i++) {
+            for(int j = 0; j <= wnd.GetWndHeight() / 48; j++) {
+                //Tile.backgroundGrassTile.Draw(g, i * 48, j * 48);
+                GameObjectManager.spawn(new BackgroundGrass(i * 48, j * 48));
+                //gameObjects.add();
+            }
+        }
+        GameObjectManager.spawn(new Player(12, 12));
+        GameObjectManager.spawn(new ObstacleBoulder(48,48*2));
+        GameObjectManager.spawn(new ObstacleBoulder(48,48*3));
     }
 
     /*! \fn public void run()
@@ -157,17 +167,9 @@ public class Game implements Runnable
      */
     private void Update()
     {
-        if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
-            player.x += 5;
-        }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
-            player.x -= 5;
-        }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
-            player.y -= 5;
-        }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
-            player.y += 5;
+        GameObjectManager.updateObjects();
+        for(GameObject gameObject : GameObjectManager.getObjects()) {
+            gameObject.update();
         }
     }
 
@@ -198,6 +200,7 @@ public class Game implements Runnable
         }
             /// Se obtine contextul grafic curent in care se poate desena.
         g = bs.getDrawGraphics();
+        GameObject.graphics = g;
             /// Se sterge ce era
         g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
 
@@ -208,13 +211,11 @@ public class Game implements Runnable
 //            Tile.waterTile.Draw(g, 2 * Tile.TILE_WIDTH, 0);
 //            Tile.mountainTile.Draw(g, 3 * Tile.TILE_WIDTH, 0);
 //            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
-            for(int i = 0 ; i <= wnd.GetWndWidth() / 48; i++) {
-                for(int j = 0; j <= wnd.GetWndHeight() / 48; j++) {
-                    Tile.backgroundGrassTile.Draw(g, i * 48, j * 48);
-                }
-            }
 
-            player.Draw(g, player.x, player.y);
+            //System.out.println("=".repeat(20) + "LOOP" + "=".repeat(20));
+            for(GameObject gameObject : GameObjectManager.getObjects()) {
+                gameObject.draw();
+            }
 
             //g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
 
