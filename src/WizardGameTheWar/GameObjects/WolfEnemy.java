@@ -10,7 +10,6 @@ public class WolfEnemy extends GameObject {
         this.y = y;
         health = 3;
     }
-
     @Override
     public void update() {
         for(GameObject obj : GameObjectManager.getObjects()) {
@@ -19,6 +18,13 @@ public class WolfEnemy extends GameObject {
                     health--;
                     GameObjectManager.despawn(obj);
                 }
+            }
+            if(obj instanceof Player) {
+                float dx = obj.x - this.x;
+                float dy = obj.y - this.y;
+                double angle = Math.atan2(dy, dx);
+                x += 3 *  Math.cos(angle);
+                y += 3 * Math.sin(angle);
             }
         }
 
