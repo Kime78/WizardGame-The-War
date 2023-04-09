@@ -67,6 +67,7 @@ public class Game implements Runnable
         GameObjectManager.spawn(new Player(12, 12));
         GameObjectManager.spawn(new ObstacleBoulder(48,48*2));
         GameObjectManager.spawn(new ObstacleBoulder(48,48*3));
+        GameObjectManager.spawn(new WolfEnemy(200, 200));
 
         Mouse.canvas = wnd.GetCanvas();
         Mouse.addMouseListener();
