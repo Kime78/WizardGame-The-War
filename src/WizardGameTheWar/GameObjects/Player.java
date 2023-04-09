@@ -7,7 +7,6 @@ import WizardGameTheWar.Mouse;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
 public class Player extends GameObject {
     Cooldown zapSpell;
     public Player(int x, int y) {
@@ -33,12 +32,9 @@ public class Player extends GameObject {
         if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
             deltaY += 5;
         }
-        if(Keyboard.isKeyPressed(KeyEvent.VK_1)) {
-            GameObjectManager.spawn(new ZapSpell(this.x + 60, this.y + 60));
-        }
         if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
             if(zapSpell.isAvailable()) {
-                GameObjectManager.spawn(new ZapSpell(Mouse.getPosition().x, Mouse.getPosition().y));
+                GameObjectManager.spawn(new ZapSpell(this.x, this.y, Mouse.getPosition()));
                 zapSpell.use();
             }
         }
