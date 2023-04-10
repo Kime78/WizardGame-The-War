@@ -1,14 +1,20 @@
-package WizardGameTheWar.GameObjects;
+package WizardGameTheWar.GameObjects.Spells;
 
+import WizardGameTheWar.GameObjects.GameObject;
+import WizardGameTheWar.GameObjects.GameObjectManager;
+import WizardGameTheWar.GameObjects.Obstacles.Obstacle;
 import WizardGameTheWar.Graphics.Assets;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
-public class ZapSpell extends GameObject {
+/***
+ * Clasa se ocupa de un spell care apare la click
+ */
+public class Zap extends Spell {
     Point target;
-    public ZapSpell(int x, int y, Point target) {
+    public Zap(int x, int y, Point target) {
         this.sprite = Assets.spellZap;
         this.x = x;
         this.y = y;
@@ -35,7 +41,7 @@ public class ZapSpell extends GameObject {
         x += 7 * Math.cos(angle);
         y += 7 * Math.sin(angle);
         for(GameObject obj : GameObjectManager.getObjects()) {
-            if(obj instanceof ObstacleBoulder) {
+            if(obj instanceof Obstacle) {
                 if(this.collidesWith(obj)) {
                     GameObjectManager.despawn(this);
                 }

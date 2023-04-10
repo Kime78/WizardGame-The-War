@@ -1,14 +1,20 @@
 package WizardGameTheWar.GameObjects;
 
 import WizardGameTheWar.Cooldown;
+import WizardGameTheWar.GameObjects.Obstacles.Obstacle;
+import WizardGameTheWar.GameObjects.Spells.Zap;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.Keyboard;
 import WizardGameTheWar.Mouse;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+/***
+ * Aceasta clasa se ocupa de jucator
+ */
 public class Player extends GameObject {
-    Cooldown zapSpell;
+    private Cooldown zapSpell;
     public Player(int x, int y) {
         sprite = Assets.player;
         this.x = x;
@@ -17,6 +23,9 @@ public class Player extends GameObject {
         zapSpell = new Cooldown(500);
     }
     @Override
+    /***
+     * Metoda se ocupa cu verificarea inputului(mouse, tastatura), si verifica coliziuni
+     */
     public void update() {
         int deltaX = this.x;
         int deltaY = this.y;
@@ -34,12 +43,12 @@ public class Player extends GameObject {
         }
         if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
             if(zapSpell.isAvailable()) {
-                GameObjectManager.spawn(new ZapSpell(this.x, this.y, Mouse.getPosition()));
+                GameObjectManager.spawn(new Zap(this.x, this.y, Mouse.getPosition()));
                 zapSpell.use();
             }
         }
         for(GameObject obj : GameObjectManager.getObjects()) {
-            if(obj instanceof ObstacleBoulder) {
+            if(obj instanceof Obstacle) {
                 if(this.collidesWith(obj)) {
                     if(this.x > obj.x)
                         deltaX = this.x + 1;

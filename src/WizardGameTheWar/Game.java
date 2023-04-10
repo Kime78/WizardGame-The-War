@@ -1,18 +1,20 @@
 package WizardGameTheWar;
 
+import WizardGameTheWar.GameObjects.Backgrounds.Grass;
+import WizardGameTheWar.GameObjects.Enemies.Wolf;
+import WizardGameTheWar.GameObjects.Obstacles.Boulder;
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.GameObjects.*;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
-import java.util.ArrayList;
 
 
 public class Game implements Runnable
 {
+    private static Game instance;
     private GameWindow      wnd;        /*!< Fereastra in care se va desena tabla jocului*/
     private boolean         runState;   /*!< Flag ce starea firului de executie.*/
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
@@ -31,7 +33,15 @@ public class Game implements Runnable
         \param width Latimea ferestrei in pixeli.
         \param height Inaltimea ferestrei in pixeli.
      */
-    public Game(String title, int width, int height)
+
+    public static Game getInstance() {
+        if(instance == null) {
+            instance = new Game("WizardGame The War", 640, 480);
+        }
+        return instance;
+    }
+
+    private Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
             /// Acest lucru va fi realizat in metoda init() prin apelul
@@ -60,14 +70,14 @@ public class Game implements Runnable
         for(int i = 0 ; i <= wnd.GetWndWidth() / 48; i++) {
             for(int j = 0; j <= wnd.GetWndHeight() / 48; j++) {
                 //Tile.backgroundGrassTile.Draw(g, i * 48, j * 48);
-                GameObjectManager.spawn(new BackgroundGrass(i * 48, j * 48));
+                GameObjectManager.spawn(new Grass(i * 48, j * 48));
                 //gameObjects.add();
             }
         }
         GameObjectManager.spawn(new Player(12, 12));
-        GameObjectManager.spawn(new ObstacleBoulder(48,48*2));
-        GameObjectManager.spawn(new ObstacleBoulder(48,48*3));
-        GameObjectManager.spawn(new WolfEnemy(200, 200));
+        GameObjectManager.spawn(new Boulder(48,48*2));
+        GameObjectManager.spawn(new Boulder(48,48*3));
+        GameObjectManager.spawn(new Wolf(200, 200));
 
         Mouse.canvas = wnd.GetCanvas();
         Mouse.addMouseListener();

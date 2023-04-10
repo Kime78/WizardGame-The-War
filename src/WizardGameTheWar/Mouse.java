@@ -39,6 +39,10 @@ public class Mouse extends MouseAdapter {
         return pressedButtons.getOrDefault(button, false);
     }
 
+    /***
+     * Getterul returneaza pozitia mouse-ul relativ cu window-ul jocului
+     * @return Pozitia mouse-ului in coordonate
+     */
     public static Point getPosition() {
         return canvas.getMousePosition();
     }

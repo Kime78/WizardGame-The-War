@@ -9,7 +9,7 @@ public class Main
      */
     public static void main(String[] args)
     {
-        Game paooGame = new Game("WizardGame The War", 640, 480);
+        Game paooGame = Game.getInstance();
         paooGame.StartGame();
     }
 }

@@ -22,9 +22,6 @@ public abstract class GameObject {
      */
     public static Graphics graphics;
 
-
-    public static ArrayList<GameObject> objects;
-
     /*******
      * Metoda draw desenează pe ecran un sprite(o dală)
      */
