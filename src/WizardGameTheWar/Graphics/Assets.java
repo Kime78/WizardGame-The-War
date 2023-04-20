@@ -35,6 +35,22 @@ public class Assets
     public static BufferedImage map3enemy1;
     public static BufferedImage map3enemy2;
     public static BufferedImage map3enemy3;
+    public static BufferedImage bookFireBall;
+    public static BufferedImage bookIcicle;
+    public static BufferedImage bookBoulder;
+    public static BufferedImage bookWindPush;
+    public static BufferedImage bookTornado;
+    public static BufferedImage bookZap;
+    public static BufferedImage bookManaBullet;
+    public static BufferedImage bookManaFireBall;
+    public static BufferedImage objectChestClosed;
+    public static BufferedImage objectChestOpen;
+    public static BufferedImage pickupLifePotion;
+    public static BufferedImage pickupStone;
+    public static BufferedImage pickupManaPotion;
+
+
+
 
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
@@ -78,5 +94,21 @@ public class Assets
         obstacleTree = sheet.crop(0, 5);
         obstacleBoulder = sheet.crop(1, 5);
         obstacleVine = sheet.crop(4, 5);
+
+        objectChestClosed = sheet.crop(2, 5);
+        objectChestOpen = sheet.crop(3, 5);
+
+        bookFireBall = sheet.crop(0, 6);
+        bookIcicle = sheet.crop(1, 6);
+        bookBoulder = sheet.crop(2, 6);
+        bookWindPush = sheet.crop(3, 6);
+        bookTornado = sheet.crop(4, 6);
+        bookZap = sheet.crop(5, 6);
+        bookManaBullet = sheet.crop(6, 6);
+        bookManaFireBall = sheet.crop(7, 6);
+
+        pickupLifePotion = sheet.crop(0, 7);
+        pickupManaPotion = sheet.crop(1, 7);
+        pickupStone = sheet.crop(2, 7);
     }
 }

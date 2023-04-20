@@ -21,7 +21,7 @@ public class Enemy extends GameObject {
                 float dx = obj.x - this.x;
                 float dy = obj.y - this.y;
                 double angle = Math.atan2(dy, dx);
-                x += 3 *  Math.cos(angle);
+                x += 3 * Math.cos(angle);
                 y += 3 * Math.sin(angle);
             }
         }

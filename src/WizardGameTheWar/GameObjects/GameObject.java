@@ -2,7 +2,6 @@ package WizardGameTheWar.GameObjects;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 /*****
  * Aceasta clasa abstractizează ideea de un obiect al jocului

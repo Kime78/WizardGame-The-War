@@ -2,7 +2,7 @@ package WizardGameTheWar.GameObjects;
 
 import WizardGameTheWar.Cooldown;
 import WizardGameTheWar.GameObjects.Obstacles.Obstacle;
-import WizardGameTheWar.GameObjects.Spells.Zap;
+import WizardGameTheWar.GameObjects.Spells.*;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.Keyboard;
 import WizardGameTheWar.Mouse;
@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
  * Aceasta clasa se ocupa de jucator
  */
 public class Player extends GameObject {
-    private Cooldown zapSpell;
+    private final Cooldown zapSpell;
     public Player(int x, int y) {
         sprite = Assets.player;
         this.x = x;

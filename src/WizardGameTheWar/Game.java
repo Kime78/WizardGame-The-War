@@ -1,7 +1,7 @@
 package WizardGameTheWar;
 
 import WizardGameTheWar.GameObjects.Backgrounds.Grass;
-import WizardGameTheWar.GameObjects.Enemies.Wolf;
+import WizardGameTheWar.GameObjects.Enemies.*;
 import WizardGameTheWar.GameObjects.Obstacles.Boulder;
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
@@ -77,7 +77,7 @@ public class Game implements Runnable
         GameObjectManager.spawn(new Player(12, 12));
         GameObjectManager.spawn(new Boulder(48,48*2));
         GameObjectManager.spawn(new Boulder(48,48*3));
-        GameObjectManager.spawn(new Wolf(200, 200));
+        GameObjectManager.spawn(new GhostSkeleton(200, 200));
 
         Mouse.canvas = wnd.GetCanvas();
         Mouse.addMouseListener();
@@ -102,7 +102,7 @@ public class Game implements Runnable
         final double timeFrame      = 1000000000 / framesPerSecond; /*!< Durata unui frame in nanosecunde.*/
 
             /// Atat timp timp cat threadul este pornit Update() & Draw()
-        while (runState == true)
+        while (runState)
         {
                 /// Se obtine timpul curent
             curentTime = System.nanoTime();
@@ -126,7 +126,7 @@ public class Game implements Runnable
      */
     public synchronized void StartGame()
     {
-        if(runState == false)
+        if(!runState)
         {
                 /// Se actualizeaza flagul de stare a threadului
             runState = true;
@@ -150,7 +150,7 @@ public class Game implements Runnable
      */
     public synchronized void StopGame()
     {
-        if(runState == true)
+        if(runState)
         {
                 /// Actualizare stare thread
             runState = false;
@@ -184,10 +184,6 @@ public class Game implements Runnable
         GameObjectManager.updateObjects();
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
-        }
-
-        if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
-            System.out.println("CLIIIIIIIIIIIIIIIIIIICK at" + Mouse.getPosition());
         }
     }
 
