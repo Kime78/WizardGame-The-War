@@ -6,7 +6,7 @@ import WizardGameTheWar.Graphics.Assets;
 /***
  * Aceasta clasa este un obiect de background al nivelului Campie
  */
-public class Flowers extends GameObject {
+public class Flowers extends Background {
     public Flowers(int x, int y) {
         sprite = Assets.backgroundFlowers;
         this.x = x;

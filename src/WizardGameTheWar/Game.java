@@ -1,5 +1,6 @@
 package WizardGameTheWar;
 
+import WizardGameTheWar.GameObjects.Backgrounds.Background;
 import WizardGameTheWar.GameObjects.Backgrounds.Grass;
 import WizardGameTheWar.GameObjects.Enemies.*;
 import WizardGameTheWar.GameObjects.Obstacles.Boulder;
@@ -10,6 +11,7 @@ import WizardGameTheWar.GameObjects.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
 
 
 public class Game implements Runnable
@@ -20,7 +22,7 @@ public class Game implements Runnable
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
     private BufferStrategy  bs;         /*!< Referinta catre un mecanism cu care se organizeaza memoria complexa pentru un canvas.*/
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
-
+    private ArrayList<Background> backgrounds;
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
     /*! \fn public Game(String title, int width, int height)
@@ -67,17 +69,13 @@ public class Game implements Runnable
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        for(int i = 0 ; i <= wnd.GetWndWidth() / 48; i++) {
-            for(int j = 0; j <= wnd.GetWndHeight() / 48; j++) {
-                //Tile.backgroundGrassTile.Draw(g, i * 48, j * 48);
-                GameObjectManager.spawn(new Grass(i * 48, j * 48));
-                //gameObjects.add();
-            }
-        }
+        Level nivelTest = LevelLoader.loadLevelFromString("Campie 1 5 200 50 10 400 300 300 90 350 123 456 2 Wolf 500 500 Leprechaun 0 300 2 3 0 0");
+
+        backgrounds = nivelTest.backgrounds;
         GameObjectManager.spawn(new Player(12, 12));
-        GameObjectManager.spawn(new Boulder(48,48*2));
-        GameObjectManager.spawn(new Boulder(48,48*3));
-        GameObjectManager.spawn(new GhostSkeleton(200, 200));
+        for(GameObject object : nivelTest.objects) {
+            GameObjectManager.spawn(object);
+        }
 
         Mouse.canvas = wnd.GetCanvas();
         Mouse.addMouseListener();
@@ -147,6 +145,7 @@ public class Game implements Runnable
         \brief Opreste executie thread-ului.
 
         Metoda trebuie sa fie declarata synchronized pentru ca apelul acesteia sa fie semaforizat.
+
      */
     public synchronized void StopGame()
     {
@@ -227,6 +226,9 @@ public class Game implements Runnable
 //            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
 
             //System.out.println("=".repeat(20) + "LOOP" + "=".repeat(20));
+            for(Background bkg : backgrounds) {
+                bkg.draw();
+            }
             for(GameObject gameObject : GameObjectManager.getObjects()) {
                 gameObject.draw();
             }
