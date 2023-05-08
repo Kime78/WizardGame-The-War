@@ -1,14 +1,15 @@
 package WizardGameTheWar.GameObjects.Obstacles;
 
+import WizardGameTheWar.FactoryException;
 import WizardGameTheWar.LevelType;
 
 public class ObstacleFactory {
-    public static Obstacle createObstacle(LevelType level, int x, int y) {
+    public static Obstacle createObstacle(LevelType level, int x, int y) throws FactoryException {
         switch (level) {
             case Campie: return new Vine(x, y);
             case Padure: return new Tree(x, y);
             case Pestera: return new Boulder(x, y);
-            default: throw new RuntimeException("Unknown Level type");
+            default: throw new FactoryException("Unknown Level type");
         }
     }
 }

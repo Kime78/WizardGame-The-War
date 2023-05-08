@@ -1,7 +1,9 @@
 package WizardGameTheWar.GameObjects.Enemies;
 
+import WizardGameTheWar.FactoryException;
+
 public class EnemyFactory {
-    public static Enemy createEnemy(String enemyName, int x, int y) {
+    public static Enemy createEnemy(String enemyName, int x, int y) throws FactoryException {
         switch (enemyName) {
             case "Wolf": return new Wolf(x, y);
             case "Frog": return new Frog(x, y);
@@ -13,7 +15,7 @@ public class EnemyFactory {
             case "Spirit": return new Spirit(x, y);
             case "TentacleMonster": return new TentacleMonster(x, y);
             case "ElectricitySkeleton": return new ElectricitySkeleton(x, y);
-            default: throw new RuntimeException("Invalid enemy: " + enemyName);
+            default: throw new FactoryException("Invalid enemy: " + enemyName);
         }
     }
 }

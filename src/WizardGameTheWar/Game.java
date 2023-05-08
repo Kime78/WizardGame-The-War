@@ -64,13 +64,21 @@ public class Game implements Runnable
      */
     private void InitGame()
     {
-        wnd = new GameWindow("WizardGame: The war", 800, 600);
+        wnd = new GameWindow("WizardGame: The war", 816, 624);
             /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        Level nivelTest = LevelLoader.loadLevelFromString("Campie 1 5 200 50 10 400 300 300 90 350 123 456 2 Wolf 500 500 Leprechaun 0 300 2 3 0 0");
-
+        String levelString = "Pestera 1 5 200 50 10 400 300 300 90 350 123 456 2 Wolf 500 500 Leprechaun 0 300 2 0 3 0";
+        Level nivelTest = null;
+        try {
+            nivelTest = LevelLoader.loadLevelFromString(levelString);
+        }
+        catch (InvalidLevelException e) {
+            System.out.println("Invalid level string: " + levelString);
+            System.out.println(e);
+            System.exit(-1);
+        }
         backgrounds = nivelTest.backgrounds;
         GameObjectManager.spawn(new Player(12, 12));
         for(GameObject object : nivelTest.objects) {
