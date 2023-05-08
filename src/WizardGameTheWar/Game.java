@@ -1,15 +1,11 @@
 package WizardGameTheWar;
 
 import WizardGameTheWar.GameObjects.Backgrounds.Background;
-import WizardGameTheWar.GameObjects.Backgrounds.Grass;
-import WizardGameTheWar.GameObjects.Enemies.*;
-import WizardGameTheWar.GameObjects.Obstacles.Boulder;
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.GameObjects.*;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
@@ -23,6 +19,7 @@ public class Game implements Runnable
     private BufferStrategy  bs;         /*!< Referinta catre un mecanism cu care se organizeaza memoria complexa pentru un canvas.*/
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
     private ArrayList<Background> backgrounds;
+    LevelEditor editor = new LevelEditor();
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
     /*! \fn public Game(String title, int width, int height)
@@ -53,6 +50,8 @@ public class Game implements Runnable
             /// Resetarea flagului runState ce indica starea firului de executie (started/stoped)
         runState = false;
         GameObjectManager.init();
+
+
     }
 
     /*! \fn private void init()
@@ -69,7 +68,7 @@ public class Game implements Runnable
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        String levelString = "Pestera 1 5 200 50 10 400 300 300 90 350 123 456 2 Wolf 500 500 Leprechaun 0 300 2 0 3 0";
+        String levelString = "Pestera 1 5 9 9 7 7 5 5 7 5 6 5 2 Wolf 500 500 Leprechaun 0 300 2 0 3 0";
         Level nivelTest = null;
         try {
             nivelTest = LevelLoader.loadLevelFromString(levelString);
@@ -80,13 +79,15 @@ public class Game implements Runnable
             System.exit(-1);
         }
         backgrounds = nivelTest.backgrounds;
-        GameObjectManager.spawn(new Player(12, 12));
+        //GameObjectManager.spawn(new Player(200, 200));
         for(GameObject object : nivelTest.objects) {
             GameObjectManager.spawn(object);
         }
 
         Mouse.canvas = wnd.GetCanvas();
         Mouse.addMouseListener();
+        editor.wnd = wnd;
+        editor.init();
     }
 
     /*! \fn public void run()
@@ -188,6 +189,7 @@ public class Game implements Runnable
      */
     private void Update()
     {
+
         GameObjectManager.updateObjects();
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
@@ -222,8 +224,12 @@ public class Game implements Runnable
             /// Se obtine contextul grafic curent in care se poate desena.
         g = bs.getDrawGraphics();
         GameObject.graphics = g;
+        editor.gfx = g;
             /// Se sterge ce era
         g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
+
+
+
 
             /// operatie de desenare
             // ...............
@@ -240,6 +246,8 @@ public class Game implements Runnable
             for(GameObject gameObject : GameObjectManager.getObjects()) {
                 gameObject.draw();
             }
+
+            editor.run();
 
             //g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
 

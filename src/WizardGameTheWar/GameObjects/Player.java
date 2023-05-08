@@ -27,19 +27,19 @@ public class Player extends GameObject {
      * Metoda se ocupa cu verificarea inputului(mouse, tastatura), si verifica coliziuni
      */
     public void update() {
-        int deltaX = this.x;
-        int deltaY = this.y;
+        int deltaX = 0;
+        int deltaY = 0;
         if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
-            deltaX += 5;
+            deltaX += 2;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
-            deltaX -= 5;
+            deltaX -= 2;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
-            deltaY -= 5;
+            deltaY -= 2;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
-            deltaY += 5;
+            deltaY += 2;
         }
         if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
             if(zapSpell.isAvailable()) {
@@ -47,22 +47,18 @@ public class Player extends GameObject {
                 zapSpell.use();
             }
         }
+        this.x += deltaX;
+        this.y += deltaY;
         for(GameObject obj : GameObjectManager.getObjects()) {
             if(obj instanceof Obstacle) {
                 if(this.collidesWith(obj)) {
-                    if(this.x > obj.x)
-                        deltaX = this.x + 1;
-                    else
-                        deltaX = this.x - 1;
-                    if(this.y > obj.y)
-                        deltaY = this.y + 1;
-                    else
-                        deltaY = this.y - 1;
+                    deltaX = -deltaX;
+                    deltaY = -deltaY;
                     break;
                 }
             }
         }
-        this.x = deltaX;
-        this.y = deltaY;
+        this.x += deltaX;
+        this.y += deltaY;
     }
 }
