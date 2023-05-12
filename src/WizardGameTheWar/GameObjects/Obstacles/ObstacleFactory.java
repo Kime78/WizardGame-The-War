@@ -1,7 +1,7 @@
 package WizardGameTheWar.GameObjects.Obstacles;
 
 import WizardGameTheWar.FactoryException;
-import WizardGameTheWar.LevelType;
+import WizardGameTheWar.Levels.LevelType;
 
 public class ObstacleFactory {
     public static Obstacle createObstacle(LevelType level, int x, int y) throws FactoryException {

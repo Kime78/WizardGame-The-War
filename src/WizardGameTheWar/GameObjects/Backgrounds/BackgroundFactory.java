@@ -1,7 +1,7 @@
 package WizardGameTheWar.GameObjects.Backgrounds;
 
 import WizardGameTheWar.FactoryException;
-import WizardGameTheWar.LevelType;
+import WizardGameTheWar.Levels.LevelType;
 
 public class BackgroundFactory {
     public static Background createBackground(LevelType type, int x, int y) throws FactoryException {

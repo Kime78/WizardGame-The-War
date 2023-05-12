@@ -1,4 +1,4 @@
-package WizardGameTheWar;
+package WizardGameTheWar.Levels;
 
 public enum LevelType {
     Campie,

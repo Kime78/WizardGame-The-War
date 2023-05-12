@@ -4,6 +4,10 @@ import WizardGameTheWar.GameObjects.Backgrounds.Background;
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.GameObjects.*;
+import WizardGameTheWar.Levels.InvalidLevelException;
+import WizardGameTheWar.Levels.Level;
+import WizardGameTheWar.Levels.LevelEditor;
+import WizardGameTheWar.Levels.LevelLoader;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -189,7 +193,6 @@ public class Game implements Runnable
      */
     private void Update()
     {
-
         GameObjectManager.updateObjects();
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
@@ -240,7 +243,11 @@ public class Game implements Runnable
 //            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
 
             //System.out.println("=".repeat(20) + "LOOP" + "=".repeat(20));
-            for(Background bkg : backgrounds) {
+            ArrayList<Background> bkgToDraw = backgrounds;
+            if(editor.isEditing) {
+                bkgToDraw = editor.getBackgrounds();
+            }
+            for(Background bkg : bkgToDraw) {
                 bkg.draw();
             }
             for(GameObject gameObject : GameObjectManager.getObjects()) {

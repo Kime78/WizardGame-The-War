@@ -1,4 +1,4 @@
-package WizardGameTheWar;
+package WizardGameTheWar.Levels;
 
 public class InvalidLevelException extends RuntimeException {
     public InvalidLevelException(String message) {

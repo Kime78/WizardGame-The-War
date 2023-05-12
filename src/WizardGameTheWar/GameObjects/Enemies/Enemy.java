@@ -7,7 +7,7 @@ import WizardGameTheWar.GameObjects.Spells.Spell;
 
 public class Enemy extends GameObject {
     protected int health;
-
+    public String name;
     @Override
     public void update() {
         for(GameObject obj : GameObjectManager.getObjects()) {

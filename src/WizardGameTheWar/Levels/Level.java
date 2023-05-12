@@ -1,4 +1,4 @@
-package WizardGameTheWar;
+package WizardGameTheWar.Levels;
 
 import WizardGameTheWar.GameObjects.Backgrounds.Background;
 import WizardGameTheWar.GameObjects.GameObject;

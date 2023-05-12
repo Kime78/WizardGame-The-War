@@ -12,6 +12,7 @@ public class Gargoyle extends Enemy {
         this.x = x;
         this.y = y;
         health = 3;
+        name = "Gargoyle";
     }
 
     /***

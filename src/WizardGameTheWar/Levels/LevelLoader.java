@@ -1,5 +1,6 @@
-package WizardGameTheWar;
+package WizardGameTheWar.Levels;
 
+import WizardGameTheWar.FactoryException;
 import WizardGameTheWar.GameObjects.Backgrounds.BackgroundFactory;
 import WizardGameTheWar.GameObjects.Enemies.EnemyFactory;
 import WizardGameTheWar.GameObjects.Obstacles.ObstacleFactory;
