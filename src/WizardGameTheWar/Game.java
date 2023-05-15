@@ -72,7 +72,7 @@ public class Game implements Runnable
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        String levelString = "Pestera 1 5 9 9 7 7 5 5 7 5 6 5 2 Wolf 500 500 Leprechaun 0 300 2 0 3 0";
+        String levelString = "1 Pestera 5 9 9 7 7 5 5 7 5 6 5 2 Wolf 500 500 Leprechaun 0 300 2 0 3 0";
         Level nivelTest = null;
         try {
             nivelTest = LevelLoader.loadLevelFromString(levelString);
@@ -92,6 +92,8 @@ public class Game implements Runnable
         Mouse.addMouseListener();
         editor.wnd = wnd;
         editor.init();
+        Level l = SaveManager.loadSaveFromDB();
+        SaveManager.writeLevelToDB(l);
     }
 
     /*! \fn public void run()

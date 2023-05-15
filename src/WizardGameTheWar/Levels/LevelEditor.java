@@ -2,6 +2,7 @@ package WizardGameTheWar.Levels;
 
 import WizardGameTheWar.GameObjects.Backgrounds.Background;
 import WizardGameTheWar.GameObjects.Backgrounds.BackgroundFactory;
+import WizardGameTheWar.GameObjects.Enemies.Enemy;
 import WizardGameTheWar.GameObjects.Enemies.EnemyFactory;
 import WizardGameTheWar.GameObjects.GameObject;
 import WizardGameTheWar.GameObjects.GameObjectManager;
@@ -25,8 +26,8 @@ public class LevelEditor implements KeyListener, MouseListener {
     public Graphics gfx;
     public boolean isEditing;
     private boolean isEnemy;
-    private final ArrayList<GameObject> obstaclesToBeAdded = new ArrayList<>();
-    private final ArrayList<GameObject> enemiesToBeAdded = new ArrayList<>();
+    private final ArrayList<Obstacle> obstaclesToBeAdded = new ArrayList<>();
+    private final ArrayList<Enemy> enemiesToBeAdded = new ArrayList<>();
     private LevelType selectedLevel= LevelType.Campie;
     private String selectedEnemy = "";
 
@@ -205,20 +206,19 @@ public class LevelEditor implements KeyListener, MouseListener {
     }
     private void save() throws IOException {
         System.out.println("Saved");
-        String levelString = "";
+        String levelString = "id ";
         switch (selectedLevel) {
-            case Campie: levelString = "Campie "; break;
-            case Padure: levelString = "Padure "; break;
-            case Pestera: levelString = "Pestera "; break;
+            case Campie: levelString += "Campie "; break;
+            case Padure: levelString += "Padure "; break;
+            case Pestera: levelString += "Pestera "; break;
         }
-        levelString += "id ";
         levelString += obstaclesToBeAdded.size() + " ";
         for(GameObject obstacle : obstaclesToBeAdded) {
             levelString += obstacle.x / 48 + " " + obstacle.y / 48 + " ";
         }
         levelString += enemiesToBeAdded.size() + " ";
-        for(GameObject enemy : enemiesToBeAdded) {
-            levelString += "name " + enemy.x / 48 + " " + enemy.y / 48 + " ";
+        for(Enemy enemy : enemiesToBeAdded) {
+            levelString += enemy.name + " " + enemy.x / 48 + " " + enemy.y / 48 + " ";
         }
         levelString += "id1 id2 id3 id4";
         System.out.println(levelString);
@@ -232,12 +232,12 @@ public class LevelEditor implements KeyListener, MouseListener {
         if(isEditing) {
             Point pos = Mouse.getPosition();
             if(!isEnemy) {
-                GameObject obj = ObstacleFactory.createObstacle(selectedLevel,(pos.x / 48) * 48, (pos.y / 48) * 48);
+                Obstacle obj = ObstacleFactory.createObstacle(selectedLevel,(pos.x / 48) * 48, (pos.y / 48) * 48);
                 GameObjectManager.spawn(obj);
                 obstaclesToBeAdded.add(obj);
             }
             else {
-                GameObject obj = EnemyFactory.createEnemy(selectedEnemy,(pos.x / 48) * 48, (pos.y / 48) * 48);
+                Enemy obj = EnemyFactory.createEnemy(selectedEnemy,(pos.x / 48) * 48, (pos.y / 48) * 48);
                 GameObjectManager.spawn(obj);
                 enemiesToBeAdded.add(obj);
             }

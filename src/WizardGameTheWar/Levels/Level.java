@@ -14,7 +14,7 @@ public class Level {
     public LevelType type;
     public int[] links; //this stores where the level leads to
 
-    Level() {
+    public Level() {
         objects = new ArrayList<>();
         backgrounds = new ArrayList<>();
         links = new int[4];

@@ -8,9 +8,10 @@ import WizardGameTheWar.GameObjects.Obstacles.ObstacleFactory;
 public class LevelLoader {
     public static Level loadLevelFromString(String levelString) throws InvalidLevelException {
         Level level = new Level();
-        //levelType levelID numOfObstacles obstacleX obstacleY numOfEnemies enemyName enemyX enemyY pathToLevelID(0 if it's not linked)
+        //levelID levelType numOfObstacles obstacleX obstacleY numOfEnemies enemyName enemyX enemyY pathToLevelID(0 if it's not linked)
         String[] parts = levelString.split(" ");
         int currentIndex = 0;
+        level.id = Integer.parseInt(parts[currentIndex++]);
         switch (parts[currentIndex++]) {
             case "Campie": {
                 level.type = LevelType.Campie;
@@ -28,7 +29,7 @@ public class LevelLoader {
                 throw new InvalidLevelException("Invalid Level!");
             }
         }
-        level.id = Integer.parseInt(parts[currentIndex++]);
+
         int numOfObstacles = Integer.parseInt(parts[currentIndex++]);
         try {
             for (int i = 0; i <= 800 / 48; i++) {
@@ -45,7 +46,7 @@ public class LevelLoader {
                 int x = Integer.parseInt(parts[currentIndex++]);
                 int y = Integer.parseInt(parts[currentIndex++]);
 
-                level.objects.add(ObstacleFactory.createObstacle(level.type, x * 48, y * 48)); //FIXME: this needs to be able to load different Obstacles
+                level.objects.add(ObstacleFactory.createObstacle(level.type, x, y)); //FIXME: this needs to be able to load different Obstacles
             }
 
             int numOfEnemies = Integer.parseInt(parts[currentIndex++]);
