@@ -72,7 +72,7 @@ public class Game implements Runnable
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        String levelString = "1 Pestera 5 9 9 7 7 5 5 7 5 6 5 2 Wolf 500 500 Leprechaun 0 300 2 0 3 0";
+        String levelString = "1 Pestera 5 9 9 7 7 5 5 7 5 6 5 1 ElectricitySkeleton 500 500 2 0 3 0";
         Level nivelTest = null;
         try {
             nivelTest = LevelLoader.loadLevelFromString(levelString);
@@ -83,7 +83,7 @@ public class Game implements Runnable
             System.exit(-1);
         }
         backgrounds = nivelTest.backgrounds;
-        //GameObjectManager.spawn(new Player(200, 200));
+        GameObjectManager.spawn(new Player(200, 200));
         for(GameObject object : nivelTest.objects) {
             GameObjectManager.spawn(object);
         }
@@ -92,8 +92,8 @@ public class Game implements Runnable
         Mouse.addMouseListener();
         editor.wnd = wnd;
         editor.init();
-        Level l = SaveManager.loadSaveFromDB();
-        SaveManager.writeLevelToDB(l);
+        //Level l = SaveManager.loadSaveFromDB();
+        //SaveManager.writeLevelToDB(l);
     }
 
     /*! \fn public void run()
@@ -193,8 +193,7 @@ public class Game implements Runnable
 
         Metoda este declarata privat deoarece trebuie apelata doar in metoda run()
      */
-    private void Update()
-    {
+    private void Update()  {
         GameObjectManager.updateObjects();
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();

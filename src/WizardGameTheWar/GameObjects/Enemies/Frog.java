@@ -13,7 +13,6 @@ import java.awt.*;
  * Clasa reprezinta inamicul broasca din harta Campie
  */
 public class Frog extends Enemy {
-    //FIXME: This is just a carbon copy of the wolf enemy.
     private Cooldown jumpCooldown;
     private boolean isJumping;
     private Point jumpTarget;
@@ -21,7 +20,7 @@ public class Frog extends Enemy {
         sprite = Assets.map1enemy3;
         this.x = x;
         this.y = y;
-        health = 3;
+        health = 5;
         name = "Frog";
 
         jumpCooldown = new Cooldown(1500);
@@ -37,22 +36,13 @@ public class Frog extends Enemy {
      */
     @Override
     public void update() {
-        //super.update();
-        for(GameObject obj: GameObjectManager.getObjects()) {
-            if(obj instanceof Spell) {
-                if(this.collidesWith(obj)) {
-                    health--;
-                    GameObjectManager.despawn(obj);
-                }
-            }
-        }
-        if(health <= 0) {
-            GameObjectManager.despawn(this);
-        }
+        super.update();
         if(jumpCooldown.isAvailable() && !isJumping) {
             jumpCooldown.use();
-            jumpTarget.x = 48 + (int) (Math.random() * 500);
-            jumpTarget.y = 48 + (int) (Math.random() * 500);
+            do {
+                jumpTarget.x = 48 + (int) (Math.random() * 500);
+                jumpTarget.y = 48 + (int) (Math.random() * 500);
+            } while (isValidPosition(jumpTarget));
             isJumping = true;
         }
         if(isJumping) {
@@ -66,7 +56,6 @@ public class Frog extends Enemy {
             double angle = Math.atan2(dy, dx);
             x += 10 * Math.cos(angle);
             y += 10 * Math.sin(angle);
-
         }
     }
 }

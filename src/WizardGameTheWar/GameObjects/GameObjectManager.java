@@ -1,5 +1,8 @@
 package WizardGameTheWar.GameObjects;
 
+import WizardGameTheWar.GameObjects.Enemies.TreeMonster;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -30,7 +33,19 @@ public class GameObjectManager {
      * Metoda sterge un obiect din joc
      * @param o Obiectul ce va fi sters
      */
-    public static void despawn(GameObject o) {toBeDespawned.add(o);}
+    public static void despawn(GameObject o) {
+        toBeDespawned.add(o);
+        //fixme plsss player :(
+        if(o instanceof TreeMonster) {
+            for(GameObject obj : GameObjectManager.getObjects()) {
+                if(obj instanceof Player) {
+                    Point playerPos = new Point(obj.x, obj.y);
+                    GameObjectManager.despawn(obj);
+                    GameObjectManager.spawn(new Player(playerPos.x, playerPos.y));
+                }
+            }
+        }
+    }
 
     /**
      * Metoda actualizeaza lista de obiecte, adaugand si stergand obiectele obtinute din metodele spawn si despawn

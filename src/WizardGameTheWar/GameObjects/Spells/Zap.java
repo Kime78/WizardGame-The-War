@@ -14,11 +14,13 @@ import java.awt.image.BufferedImage;
  */
 public class Zap extends Spell {
     Point target;
-    public Zap(int x, int y, Point target) {
+    public Zap(int x, int y, Point target, SpellTarget targetType) {
         this.sprite = Assets.spellZap;
         this.x = x;
         this.y = y;
         this.target = target;
+        range = 500;
+        this.targetType = targetType;
 
         float dx = target.x - x;
         float dy = target.y - y;
@@ -47,5 +49,8 @@ public class Zap extends Spell {
                 }
             }
         }
+//        if(!isWithinCircle(new Point(x, y), origin, 500)) {
+//            GameObjectManager.despawn(this);
+//        }
     }
 }

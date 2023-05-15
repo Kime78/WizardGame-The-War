@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
  */
 public class Player extends GameObject {
     private final Cooldown zapSpell;
+    public float speed = 2;
     public Player(int x, int y) {
         sprite = Assets.player;
         this.x = x;
@@ -30,20 +31,20 @@ public class Player extends GameObject {
         int deltaX = 0;
         int deltaY = 0;
         if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
-            deltaX += 2;
+            deltaX += speed;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_A)) {
-            deltaX -= 2;
+            deltaX -= speed;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_W)) {
-            deltaY -= 2;
+            deltaY -= speed;
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_S)) {
-            deltaY += 2;
+            deltaY += speed;
         }
         if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
             if(zapSpell.isAvailable()) {
-                GameObjectManager.spawn(new Zap(this.x, this.y, Mouse.getPosition()));
+                GameObjectManager.spawn(new Zap(this.x, this.y, Mouse.getPosition(), SpellTarget.Enemy));
                 zapSpell.use();
             }
         }

@@ -14,12 +14,13 @@ import java.awt.image.BufferedImage;
  */
 public class Fireball extends Spell {
     Point target;
-    public Fireball(int x, int y, Point target) {
+    public Fireball(int x, int y, Point target, SpellTarget targetType) {
         //FIXME: to edit the actual spell, now its just a carbon copy of the Zap spell
         this.sprite = Assets.spellFireBall;
         this.x = x;
         this.y = y;
         this.target = target;
+        this.targetType = targetType;
 
         float dx = target.x - x;
         float dy = target.y - y;
