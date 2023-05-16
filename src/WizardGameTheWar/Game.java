@@ -11,6 +11,10 @@ import WizardGameTheWar.Levels.LevelLoader;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 
@@ -23,6 +27,8 @@ public class Game implements Runnable
     private BufferStrategy  bs;         /*!< Referinta catre un mecanism cu care se organizeaza memoria complexa pentru un canvas.*/
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
     private ArrayList<Background> backgrounds;
+    private final ArrayList<Level> levels = new ArrayList<>();
+    private Level loadedLevel;
     LevelEditor editor = new LevelEditor();
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
@@ -39,7 +45,7 @@ public class Game implements Runnable
 
     public static Game getInstance() {
         if(instance == null) {
-            instance = new Game("WizardGame The War", 640, 480);
+            instance = new Game("WizardGame The War", 816, 624);
         }
         return instance;
     }
@@ -65,29 +71,34 @@ public class Game implements Runnable
         Sunt construite elementele grafice (assets): dale, player, elemente active si pasive.
 
      */
-    private void InitGame()
-    {
+    private void InitGame()  {
         wnd = new GameWindow("WizardGame: The war", 816, 624);
             /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
-        String levelString = "1 Pestera 5 9 9 7 7 5 5 7 5 6 5 1 ElectricitySkeleton 500 500 2 0 3 0";
-        Level nivelTest = null;
+
         try {
-            nivelTest = LevelLoader.loadLevelFromString(levelString);
+            var levelFile = new File("level1.txt");
+            var reader = new BufferedReader(new FileReader(levelFile));
+            var levelStrings = reader.lines().toArray();
+            for (var levelString3: levelStrings) {
+                if(levelString3 != "")
+                    levels.add(LevelLoader.loadLevelFromString((String) levelString3));
+            }
         }
         catch (InvalidLevelException e) {
-            System.out.println("Invalid level string: " + levelString);
+            System.out.println("Invalid level string: ");
             System.out.println(e);
             System.exit(-1);
         }
-        backgrounds = nivelTest.backgrounds;
-        GameObjectManager.spawn(new Player(200, 200));
-        for(GameObject object : nivelTest.objects) {
-            GameObjectManager.spawn(object);
+        catch (FileNotFoundException e) {
+            System.exit(-1);
         }
 
+        int x = 61;
+        backgrounds = levels.get(x).backgrounds;
+        changeLevel(levels.get(x), 3);
         Mouse.canvas = wnd.GetCanvas();
         Mouse.addMouseListener();
         editor.wnd = wnd;
@@ -104,7 +115,9 @@ public class Game implements Runnable
     public void run()
     {
             /// Initializeaza obiectul game
+
         InitGame();
+
         long oldTime = System.nanoTime();   /*!< Retine timpul in nanosecunde aferent frame-ului anterior.*/
         long curentTime;                    /*!< Retine timpul curent de executie.*/
 
@@ -137,6 +150,41 @@ public class Game implements Runnable
 
         Metoda trebuie sa fie declarata synchronized pentru ca apelul acesteia sa fie semaforizat.
      */
+    private void changeLevel(Level lev, int dir) {
+        loadedLevel = lev;
+        for(GameObject object : GameObjectManager.getObjects()) {
+            GameObjectManager.despawn(object);
+        }
+        GameObjectManager.updateObjects();
+        backgrounds = lev.backgrounds;
+        Player tmp = null;
+        for (GameObject obj : GameObjectManager.getObjects()) {
+            if(obj instanceof Player)
+                GameObjectManager.despawn(obj);
+        }
+        if(dir == 1) {
+            tmp = new Player(816 / 2, 48 + 5);
+        }
+        else if(dir == 2) {
+            tmp = new Player(816 / 2, 624 - 48 * 2 - 5);
+        }
+        else if(dir == 3) {
+            tmp = new Player(48 + 5, 624 / 2 + 5);
+        }
+        else if(dir == 4) {
+            tmp = new Player(816 - 48 * 2 - 5, 624 / 2 + 5);
+        }
+
+
+        GameObjectManager.player = tmp;
+        GameObjectManager.spawn(tmp);
+        for(GameObject object : lev.objects) {
+            GameObjectManager.spawn(object);
+        }
+        for(GameObject object : lev.rim) {
+            GameObjectManager.spawn(object);
+        }
+    }
     public synchronized void StartGame()
     {
         if(!runState)
@@ -198,6 +246,38 @@ public class Game implements Runnable
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
         }
+        System.out.println(loadedLevel.id);
+        for(GameObject obj : GameObjectManager.getObjects()) {
+            if (obj instanceof Player) {
+                //System.out.println(obj.x + " " + obj.y + ": " + (816 / 48 / 2 - 1) * 48 + " " + (816 / 48 / 2 + 1) * 48);
+
+                if (((obj.x >= (816 / 48 / 2 - 1) * 48) && (obj.x <= (816 / 48 / 2 + 1) * 48))) {
+                    if(obj.y < 48) {
+                        changeLevel(levels.get(loadedLevel.links[0] - 1), 2);
+                        break;
+                    }
+                }
+                if (((obj.x >= (816 / 48 / 2 - 1) * 48) && (obj.x <= (816 / 48 / 2 + 1) * 48))) {
+                    if(obj.y > 624 - 48) {
+                        changeLevel(levels.get(loadedLevel.links[1] - 1), 1);
+                        break;
+                    }
+                }
+                if(!((obj.y >= 624 / 48 / 2  - 1) && (obj.y <= 624 / 48 / 2 + 1))) {
+                    if(obj.x < 0) {
+                        changeLevel(levels.get(loadedLevel.links[2] - 1), 4);
+                        break;
+                    }
+                }
+                if(!((obj.y >= 624 / 48 / 2  - 1) && (obj.y <= 624 / 48 / 2 + 1))) {
+                    if(obj.x > 816 - 48) {
+                        changeLevel(levels.get(loadedLevel.links[3] - 1), 3);
+                        break;
+                    }
+                }
+            }
+        }
+
     }
 
     /*! \fn private void Draw()

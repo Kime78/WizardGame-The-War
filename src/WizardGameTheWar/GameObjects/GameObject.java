@@ -41,6 +41,6 @@ public abstract class GameObject {
      * @return Daca Un {@link GameObject} este in coliziune cu alt GameObject
      */
     public boolean collidesWith(GameObject o){
-        return !(x >= o.x + 48 || x + 48 <= o.x || y >= o.y + 48 || y + 48 <= o.y);
+        return !(x >= o.x + 32 || x + 32 <= o.x || y >= o.y + 32 || y + 32 <= o.y);
     }
 }

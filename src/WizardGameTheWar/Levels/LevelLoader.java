@@ -46,7 +46,7 @@ public class LevelLoader {
                 int x = Integer.parseInt(parts[currentIndex++]);
                 int y = Integer.parseInt(parts[currentIndex++]);
 
-                level.objects.add(ObstacleFactory.createObstacle(level.type, x, y)); //FIXME: this needs to be able to load different Obstacles
+                level.objects.add(ObstacleFactory.createObstacle(level.type, x * 48, y * 48)); //FIXME: this needs to be able to load different Obstacles
             }
 
             int numOfEnemies = Integer.parseInt(parts[currentIndex++]);
@@ -56,7 +56,7 @@ public class LevelLoader {
                 int x = Integer.parseInt(parts[currentIndex++]);
                 int y = Integer.parseInt(parts[currentIndex++]);
 
-                level.objects.add(EnemyFactory.createEnemy(name, x, y));
+                level.objects.add(EnemyFactory.createEnemy(name, x * 48, y * 48));
             }
 
             level.links[0] = Integer.parseInt(parts[currentIndex++]);
@@ -70,37 +70,37 @@ public class LevelLoader {
                 //cel mai tumefiat if din viata mea
                 if(level.links[0] != 0) {
                     if(!((i >= 816 / 48 / 2  - 1) && (i <= 816 / 48 / 2 + 1))) {
-                        level.objects.add(ObstacleFactory.createObstacle(level.type, i * 48, 0));
+                        level.rim.add(ObstacleFactory.createObstacle(level.type, i * 48, 0));
                     }
                 }
                 else {
-                        level.objects.add(ObstacleFactory.createObstacle(level.type, i * 48, 0));
+                        level.rim.add(ObstacleFactory.createObstacle(level.type, i * 48, 0));
                 }
                 if(level.links[1] != 0) {
                     if (!((i >= 816 / 48 / 2 - 1) && (i <= 816 / 48 / 2 + 1))) {
-                        level.objects.add(ObstacleFactory.createObstacle(level.type, i * 48, 624 - 48));
+                        level.rim.add(ObstacleFactory.createObstacle(level.type, i * 48, 624 - 48));
                     }
                 }
                 else {
-                    level.objects.add(ObstacleFactory.createObstacle(level.type, i * 48, 624 - 48));
+                    level.rim.add(ObstacleFactory.createObstacle(level.type, i * 48, 624 - 48));
                 }
             }
             for(int i = 1; i < 624 / 48; i++) {
                 if(level.links[2] != 0) {
                     if(!((i >= 624 / 48 / 2  - 1) && (i <= 624 / 48 / 2 + 1))) {
-                        level.objects.add(ObstacleFactory.createObstacle(level.type, 0, i * 48));
+                        level.rim.add(ObstacleFactory.createObstacle(level.type, 0, i * 48));
                     }
                 }
                 else {
-                    level.objects.add(ObstacleFactory.createObstacle(level.type, 0, i * 48));
+                    level.rim.add(ObstacleFactory.createObstacle(level.type, 0, i * 48));
                 }
                 if(level.links[3] != 0) {
                     if(!((i >= 624 / 48 / 2  - 1) && (i <= 624 / 48 / 2 + 1))) {
-                        level.objects.add(ObstacleFactory.createObstacle(level.type, 816 - 48, i * 48));
+                        level.rim.add(ObstacleFactory.createObstacle(level.type, 816 - 48, i * 48));
                     }
                 }
                 else {
-                    level.objects.add(ObstacleFactory.createObstacle(level.type, 816 - 48, i * 48));
+                    level.rim.add(ObstacleFactory.createObstacle(level.type, 816 - 48, i * 48));
                 }
             }
         }

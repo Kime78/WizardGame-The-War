@@ -15,6 +15,7 @@ public class GameObjectManager {
     static ArrayList<GameObject> objects;
     static Queue<GameObject> toBeSpawned;
     static Queue<GameObject> toBeDespawned;
+    public static Player player;
     public static void init() {
         objects = new ArrayList<>();
         toBeSpawned = new LinkedList<>();
@@ -26,7 +27,10 @@ public class GameObjectManager {
      * @param o Obiectul pentru a fi creat
      */
     public static void spawn(GameObject o) {
+
         toBeSpawned.add(o);
+        if(o instanceof PlayerPositionObserver)
+            player.addPlayerPositionObserver((PlayerPositionObserver) o);
     }
 
     /***
@@ -36,15 +40,15 @@ public class GameObjectManager {
     public static void despawn(GameObject o) {
         toBeDespawned.add(o);
         //fixme plsss player :(
-        if(o instanceof TreeMonster) {
-            for(GameObject obj : GameObjectManager.getObjects()) {
-                if(obj instanceof Player) {
-                    Point playerPos = new Point(obj.x, obj.y);
-                    GameObjectManager.despawn(obj);
-                    GameObjectManager.spawn(new Player(playerPos.x, playerPos.y));
-                }
-            }
-        }
+//        if(o instanceof TreeMonster) {
+//            for(GameObject obj : GameObjectManager.getObjects()) {
+//                if(obj instanceof Player) {
+//                    Point playerPos = new Point(obj.x, obj.y);
+//                    GameObjectManager.despawn(obj);
+//                    GameObjectManager.spawn(new Player(playerPos.x, playerPos.y));
+//                }
+//            }
+//        }
     }
 
     /**

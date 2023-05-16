@@ -7,13 +7,16 @@ import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.Keyboard;
 import WizardGameTheWar.Mouse;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 /***
  * Aceasta clasa se ocupa de jucator
  */
 public class Player extends GameObject {
+    private ArrayList<PlayerPositionObserver> observers = new ArrayList<>();
     private final Cooldown zapSpell;
     public float speed = 2;
     public Player(int x, int y) {
@@ -61,5 +64,13 @@ public class Player extends GameObject {
         }
         this.x += deltaX;
         this.y += deltaY;
+
+        for(PlayerPositionObserver observer : observers) {
+            observer.updatePosition(new Point(x, y));
+        }
+    }
+
+    public void addPlayerPositionObserver(PlayerPositionObserver observer) {
+        observers.add(observer);
     }
 }
