@@ -9,11 +9,14 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
+import static WizardGameTheWar.Graphics.Utils.rotateToAngle;
+
 /***
  * Clasa se ocupa de un spell care apare la click
  */
 public class ManaFireBall extends Spell {
     Point target;
+    private float spellAngle;
     public ManaFireBall(int x, int y, Point target, SpellTarget targetType) {
         //FIXME: to edit the actual spell, now its just a carbon copy of the Zap spell
         this.sprite = Assets.spellManaFireBall;
@@ -21,18 +24,13 @@ public class ManaFireBall extends Spell {
         this.y = y;
         this.target = target;
         this.targetType = targetType;
+        origin.x = x;
+        origin.y = y;
 
         float dx = target.x - x;
         float dy = target.y - y;
         double angle = Math.atan2(dy, dx) + Math.toRadians(90);
-        BufferedImage rotated = new BufferedImage(sprite.getWidth(), sprite.getHeight(), sprite.getType());
-        Graphics2D g2d = rotated.createGraphics();
-        AffineTransform transform = new AffineTransform();
-        transform.rotate(angle, sprite.getWidth()/2, sprite.getHeight()/2);
-        g2d.setTransform(transform);
-        g2d.drawImage(sprite, 0, 0, null);
-        g2d.dispose();
-        sprite = rotated;
+        sprite = rotateToAngle(sprite, angle);
     }
 
     @Override
@@ -49,5 +47,13 @@ public class ManaFireBall extends Spell {
                 }
             }
         }
+        if(!isWithinCircle(origin, new Point(x, y), 200)) {
+            GameObjectManager.despawn(this);
+        }
+        if(!(x >= target.x + 5 || x + 5 <= target.x || y >= target.y + 5 || y + 5 <= target.y)) {
+            GameObjectManager.despawn(this);
+        }
+        spellAngle += 0.05;
+        sprite = rotateToAngle(sprite, spellAngle);
     }
 }

@@ -48,6 +48,9 @@ public class Assets
     public static BufferedImage pickupLifePotion;
     public static BufferedImage pickupStone;
     public static BufferedImage pickupManaPotion;
+    public static BufferedImage map1boss;
+    public static BufferedImage map2boss;
+    public static BufferedImage map3boss;
 
 
 
@@ -61,7 +64,8 @@ public class Assets
     public static void Init()
     {
             /// Se creaza temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
-        SpriteSheet sheet = new SpriteSheet(ImageLoader.LoadImage("/textures/spritesheet_principal.png"));
+        SpriteSheet sheet = new SpriteSheet(ImageLoader.LoadImage("/textures/spritesheet_principal.png"), 32);
+        SpriteSheet bossSheet = new SpriteSheet(ImageLoader.LoadImage("/textures/spritesheet_bosi.png"), 64);
 
             /// Se obtin subimaginile corespunzatoare elementelor necesare.
         player = sheet.crop(0, 0);
@@ -110,5 +114,9 @@ public class Assets
         pickupLifePotion = sheet.crop(0, 7);
         pickupManaPotion = sheet.crop(1, 7);
         pickupStone = sheet.crop(2, 7);
+
+        map1boss = bossSheet.crop(0, 1);
+        map2boss = bossSheet.crop(0, 2);
+        map3boss = bossSheet.crop(0, 0);
     }
 }

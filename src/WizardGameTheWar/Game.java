@@ -96,7 +96,7 @@ public class Game implements Runnable
             System.exit(-1);
         }
 
-        int x = 61;
+        int x = 23;
         backgrounds = levels.get(x).backgrounds;
         changeLevel(levels.get(x), 3);
         Mouse.canvas = wnd.GetCanvas();

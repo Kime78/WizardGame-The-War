@@ -4,6 +4,8 @@ import WizardGameTheWar.GameObjects.Enemies.Enemy;
 import WizardGameTheWar.GameObjects.GameObject;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 public class Spell extends GameObject {
     protected int range;

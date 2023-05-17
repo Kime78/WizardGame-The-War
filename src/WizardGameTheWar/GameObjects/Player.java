@@ -47,7 +47,7 @@ public class Player extends GameObject {
         }
         if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
             if(zapSpell.isAvailable()) {
-                GameObjectManager.spawn(new Zap(this.x, this.y, Mouse.getPosition(), SpellTarget.Enemy));
+                GameObjectManager.spawn(new ManaFireBall(this.x, this.y, Mouse.getPosition(), SpellTarget.Enemy));
                 zapSpell.use();
             }
         }
