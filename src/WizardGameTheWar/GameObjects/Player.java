@@ -19,12 +19,20 @@ public class Player extends GameObject {
     private ArrayList<PlayerPositionObserver> observers = new ArrayList<>();
     private final Cooldown zapSpell;
     public float speed = 2;
+    public int health = 50;
+
+    public EquipableSpell[] equipedSpells = new EquipableSpell[4];
+    public Cooldown[] spellCooldowns = new Cooldown[4];
     public Player(int x, int y) {
         sprite = Assets.player;
         this.x = x;
         this.y = y;
-
+        equipedSpells[0] = new EquipableSpell(new ManaFireBall(-48, -48, new Point(), SpellTarget.Player), 1);
         zapSpell = new Cooldown(500);
+        spellCooldowns[0] = new Cooldown(6000);
+        spellCooldowns[1] = new Cooldown(6000);
+        spellCooldowns[2] = new Cooldown(6000);
+        spellCooldowns[3] = new Cooldown(6000);
     }
     @Override
     /***
@@ -33,6 +41,17 @@ public class Player extends GameObject {
     public void update() {
         int deltaX = 0;
         int deltaY = 0;
+
+        if(Keyboard.isKeyPressed(KeyEvent.VK_1)) {
+            if(equipedSpells[0] != null) {
+                System.out.println("asdasd");
+                if(spellCooldowns[0].isAvailable()) {
+                    spellCooldowns[0].use();
+                    System.out.println("asdasd2");
+                }
+            }
+        }
+
         if(Keyboard.isKeyPressed(KeyEvent.VK_D)) {
             deltaX += speed;
         }

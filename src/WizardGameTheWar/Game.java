@@ -11,6 +11,7 @@ import WizardGameTheWar.Levels.LevelLoader;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -72,7 +73,7 @@ public class Game implements Runnable
 
      */
     private void InitGame()  {
-        wnd = new GameWindow("WizardGame: The war", 816, 624);
+        wnd = new GameWindow("WizardGame: The war", 816, 624 + 120);
             /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
@@ -340,6 +341,79 @@ public class Game implements Runnable
             }
 
             editor.run();
+
+
+            g.setColor(Color.black);
+            g.drawRect(260, 685, 48, 48);
+            g.drawRect(340, 685, 48, 48);
+            g.drawRect(420, 685, 48, 48);
+            g.drawRect(500, 685, 48, 48);
+
+            Player player = null;
+            for (GameObject obj : GameObjectManager.getObjects()) {
+                if(obj instanceof Player) {
+                    player = (Player) obj;
+                    break;
+                }
+            }
+            if(player != null)
+            {
+                if(player.equipedSpells[0] != null) {
+                    if(player.spellCooldowns[0].isAvailable())
+                        g.drawImage(player.equipedSpells[0].spell.sprite, 260,685,  48, 48, null);
+                    else {
+                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[0].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                        Graphics2D g2d = grayscaleImage.createGraphics();
+                        g2d.drawImage(player.equipedSpells[0].spell.sprite, 0, 0, null);
+                        g2d.dispose();
+                        g.drawImage(grayscaleImage, 260,685,  48, 48, null);
+                    }
+                }
+                if(player.equipedSpells[1] != null) {
+                    if(player.spellCooldowns[1].isAvailable())
+                        g.drawImage(player.equipedSpells[1].spell.sprite, 340,685,  48, 48, null);
+                    else {
+                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[1].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                        Graphics2D g2d = grayscaleImage.createGraphics();
+                        g2d.drawImage(player.equipedSpells[1].spell.sprite, 0, 0, null);
+                        g2d.dispose();
+                        g.drawImage(grayscaleImage, 340,685,  48, 48, null);
+                    }
+                }
+                if(player.equipedSpells[2] != null) {
+                    if(player.spellCooldowns[2].isAvailable())
+                        g.drawImage(player.equipedSpells[2].spell.sprite, 420,685,  48, 48, null);
+                    else {
+                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[2].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                        Graphics2D g2d = grayscaleImage.createGraphics();
+                        g2d.drawImage(player.equipedSpells[2].spell.sprite, 0, 0, null);
+                        g2d.dispose();
+                        g.drawImage(grayscaleImage, 420,685,  48, 48, null);
+                    }
+                }
+                if(player.equipedSpells[3] != null) {
+                    if(player.spellCooldowns[3].isAvailable())
+                        g.drawImage(player.equipedSpells[3].spell.sprite, 500,685,  48, 48, null);
+                    else {
+                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[3].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                        Graphics2D g2d = grayscaleImage.createGraphics();
+                        g2d.drawImage(player.equipedSpells[3].spell.sprite, 0, 0, null);
+                        g2d.dispose();
+                        g.drawImage(grayscaleImage, 500,685,  48, 48, null);
+                    }
+                }
+                g.setColor(Color.red);
+                g.fillRect(100, 630, (int) ((double)player.health / 50 * 600), 20);
+                g.setColor(Color.blue.brighter());
+
+                g.fillRect(100, 655, (int) ((double)player.health / 50 * 600), 20);
+                g.setColor(Color.black);
+                g.drawRect(100,630, 600, 20);
+                g.drawRect(100,655, 600, 20);
+                g.setFont(new Font("Comic Sans", Font.BOLD, 14));
+                g.drawString("Health: " + player.health, 350, 645);
+                g.drawString("Mana: " + player.health, 350, 670);
+            }
 
             //g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
 

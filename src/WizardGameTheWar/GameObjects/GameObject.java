@@ -15,7 +15,7 @@ public abstract class GameObject {
     /***
      * Imaginea obiectului
      */
-    protected BufferedImage sprite;
+    public BufferedImage sprite;
     /***
      * O referinta pentru grafica
      */
@@ -40,7 +40,7 @@ public abstract class GameObject {
      * @param o Obiectul cu care se verifica interactiunea de coliziune
      * @return Daca Un {@link GameObject} este in coliziune cu alt GameObject
      */
-    public boolean collidesWith(GameObject o){
+    public boolean collidesWith(GameObject o) {
         return !(x >= o.x + 32 || x + 32 <= o.x || y >= o.y + 32 || y + 32 <= o.y);
     }
 }
