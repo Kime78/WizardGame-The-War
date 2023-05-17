@@ -253,25 +253,29 @@ public class Game implements Runnable
 
                 if (((obj.x >= (816 / 48 / 2 - 1) * 48) && (obj.x <= (816 / 48 / 2 + 1) * 48))) {
                     if(obj.y < 48) {
-                        changeLevel(levels.get(loadedLevel.links[0] - 1), 2);
+                        if(loadedLevel.links[0] != 0)
+                            changeLevel(levels.get(loadedLevel.links[0] - 1), 2);
                         break;
                     }
                 }
                 if (((obj.x >= (816 / 48 / 2 - 1) * 48) && (obj.x <= (816 / 48 / 2 + 1) * 48))) {
                     if(obj.y > 624 - 48) {
-                        changeLevel(levels.get(loadedLevel.links[1] - 1), 1);
+                        if(loadedLevel.links[1] != 0)
+                            changeLevel(levels.get(loadedLevel.links[1] - 1), 1);
                         break;
                     }
                 }
                 if(!((obj.y >= 624 / 48 / 2  - 1) && (obj.y <= 624 / 48 / 2 + 1))) {
                     if(obj.x < 0) {
-                        changeLevel(levels.get(loadedLevel.links[2] - 1), 4);
+                        if(loadedLevel.links[2] != 0)
+                            changeLevel(levels.get(loadedLevel.links[2] - 1), 4);
                         break;
                     }
                 }
                 if(!((obj.y >= 624 / 48 / 2  - 1) && (obj.y <= 624 / 48 / 2 + 1))) {
                     if(obj.x > 816 - 48) {
-                        changeLevel(levels.get(loadedLevel.links[3] - 1), 3);
+                        if(loadedLevel.links[3] != 0)
+                            changeLevel(levels.get(loadedLevel.links[3] - 1), 3);
                         break;
                     }
                 }
