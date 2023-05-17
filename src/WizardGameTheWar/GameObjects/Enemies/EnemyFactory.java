@@ -2,6 +2,7 @@ package WizardGameTheWar.GameObjects.Enemies;
 
 import WizardGameTheWar.FactoryException;
 import WizardGameTheWar.GameObjects.Enemies.Bosses.Cyclop;
+import WizardGameTheWar.GameObjects.Enemies.Bosses.DarkWizard;
 
 public class EnemyFactory {
     public static Enemy createEnemy(String enemyName, int x, int y) throws FactoryException {
@@ -17,6 +18,7 @@ public class EnemyFactory {
             case "TentacleMonster": return new TentacleMonster(x, y);
             case "ElectricitySkeleton": return new ElectricitySkeleton(x, y);
             case "Cyclop": return new Cyclop(x, y);
+            case "DarkWizard": return new DarkWizard(x, y);
             default: throw new FactoryException("Invalid enemy: " + enemyName);
         }
     }
