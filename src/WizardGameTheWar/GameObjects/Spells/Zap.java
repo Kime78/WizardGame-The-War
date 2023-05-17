@@ -18,6 +18,8 @@ public class Zap extends Spell {
         this.sprite = Assets.spellZap;
         this.x = x;
         this.y = y;
+        origin.x = x;
+        origin.y = y;
         this.target = target;
         range = 500;
         this.targetType = targetType;
@@ -49,8 +51,13 @@ public class Zap extends Spell {
                 }
             }
         }
-//        if(!isWithinCircle(new Point(x, y), origin, 500)) {
-//            GameObjectManager.despawn(this);
-//        }
+        if(!isWithinCircle(origin, new Point(x, y), 200)) {
+            GameObjectManager.despawn(this);
+        }
+        if(this.x == target.x) {
+            if(!(x >= target.x + 5 || x + 5 <= target.x || y >= target.y + 5 || y + 5 <= target.y)) {
+                GameObjectManager.despawn(this);
+            }
+        }
     }
 }

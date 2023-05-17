@@ -8,7 +8,7 @@ import java.awt.*;
 public class Spell extends GameObject {
     protected int range;
     public SpellTarget targetType = SpellTarget.Enemy;
-    protected Point origin = new Point();
+    public Point origin = new Point();
 
     public static boolean isWithinCircle(Point firstPoint, Point secondPoint, double range) {
         // Calculate the distance between the first point and the second point
