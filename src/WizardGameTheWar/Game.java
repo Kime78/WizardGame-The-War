@@ -10,6 +10,10 @@ import WizardGameTheWar.Levels.LevelEditor;
 import WizardGameTheWar.Levels.LevelLoader;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -19,17 +23,19 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 
-public class Game implements Runnable
+public class Game implements Runnable, MouseListener, KeyListener
 {
     private static Game instance;
     private GameWindow      wnd;        /*!< Fereastra in care se va desena tabla jocului*/
     private boolean         runState;   /*!< Flag ce starea firului de executie.*/
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
     private BufferStrategy  bs;         /*!< Referinta catre un mecanism cu care se organizeaza memoria complexa pentru un canvas.*/
-    private Graphics        g;          /*!< Referinta catre un context grafic.*/
+    private Graphics gfx;          /*!< Referinta catre un context grafic.*/
     private ArrayList<Background> backgrounds;
     private final ArrayList<Level> levels = new ArrayList<>();
     private Level loadedLevel;
+    private boolean isPaused = false;
+    private boolean isSaveSelect = false;
     LevelEditor editor = new LevelEditor();
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
@@ -61,8 +67,6 @@ public class Game implements Runnable
             /// Resetarea flagului runState ce indica starea firului de executie (started/stoped)
         runState = false;
         GameObjectManager.init();
-
-
     }
 
     /*! \fn private void init()
@@ -106,6 +110,8 @@ public class Game implements Runnable
         editor.init();
         //Level l = SaveManager.loadSaveFromDB();
         //SaveManager.writeLevelToDB(l);
+        wnd.GetCanvas().addKeyListener(this);
+        wnd.GetCanvas().addMouseListener(this);
     }
 
     /*! \fn public void run()
@@ -137,7 +143,8 @@ public class Game implements Runnable
             if((curentTime - oldTime) > timeFrame)
             {
                 /// Actualizeaza pozitiile elementelor
-                Update();
+                if(!isPaused && !isSaveSelect)
+                    Update();
                 /// Deseneaza elementele grafica in fereastra.
                 Draw();
                 oldTime = curentTime;
@@ -247,7 +254,7 @@ public class Game implements Runnable
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
         }
-        System.out.println(loadedLevel.id);
+        //System.out.println(loadedLevel.id);
         for(GameObject obj : GameObjectManager.getObjects()) {
             if (obj instanceof Player) {
                 //System.out.println(obj.x + " " + obj.y + ": " + (816 / 48 / 2 - 1) * 48 + " " + (816 / 48 / 2 + 1) * 48);
@@ -290,6 +297,99 @@ public class Game implements Runnable
 
         Metoda este declarata privat deoarece trebuie apelata doar in metoda run()
      */
+    private void drawGUI(Player player) {
+        gfx.setColor(Color.red);
+        gfx.fillRect(100, 630, (int) ((double)player.health / 50 * 600), 20);
+        gfx.setColor(Color.blue.brighter());
+
+        gfx.fillRect(100, 655, (int) ((double)player.mana / 50 * 600), 20);
+        gfx.setColor(Color.black);
+        gfx.drawRect(100,630, 600, 20);
+        gfx.drawRect(100,655, 600, 20);
+        gfx.setFont(new Font("Comic Sans", Font.BOLD, 14));
+        gfx.drawString("Health: " + player.health, 350, 645);
+        gfx.drawString("Mana: " + player.mana, 350, 670);
+
+        gfx.setColor(Color.black);
+        gfx.drawRect(260, 685, 48, 48);
+        gfx.drawRect(340, 685, 48, 48);
+        gfx.drawRect(420, 685, 48, 48);
+        gfx.drawRect(500, 685, 48, 48);
+    }
+    private void drawPauseUI() {
+        gfx.setColor(Color.white);
+        if(isPaused) {
+            gfx.fillRect(200,100, 400, 300);
+            gfx.setColor(Color.black);
+            gfx.setFont(new Font("Comic Sans", Font.BOLD, 20));
+            gfx.drawString("Paused", 360, 120);
+            gfx.drawRect(300,200, 200, 50);
+            gfx.drawString("Save Game", 345, 235);
+            gfx.drawRect(300,290, 200, 50);
+            gfx.drawString("Load Game", 345, 320);
+        }
+    }
+    private void drawSaveSelect() {
+        if(isSaveSelect) {
+            gfx.setColor(Color.white);
+            gfx.fillRect(200,100, 400, 400);
+            gfx.setColor(Color.black);
+            gfx.setFont(new Font("Comic Sans", Font.BOLD, 20));
+            gfx.drawString("Select a save slot", 330, 120);
+            gfx.drawRect(300,200, 200, 50);
+            gfx.drawString("Slot 1", 345, 235);
+            gfx.drawRect(300,290, 200, 50);
+            gfx.drawString("Slot 2", 345, 320);
+            gfx.drawRect(300,380, 200, 50);
+            gfx.drawString("Slot 3", 345, 410);
+        }
+    }
+    private void handleLevelTransition(Player player) {
+        if(player.equipedSpells[0] != null) {
+            if(player.spellCooldowns[0].isAvailable())
+                gfx.drawImage(player.equipedSpells[0].spell.sprite, 260,685,  48, 48, null);
+            else {
+                BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[0].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                Graphics2D g2d = grayscaleImage.createGraphics();
+                g2d.drawImage(player.equipedSpells[0].spell.sprite, 0, 0, null);
+                g2d.dispose();
+                gfx.drawImage(grayscaleImage, 260,685,  48, 48, null);
+            }
+        }
+        if(player.equipedSpells[1] != null) {
+            if(player.spellCooldowns[1].isAvailable())
+                gfx.drawImage(player.equipedSpells[1].spell.sprite, 340,685,  48, 48, null);
+            else {
+                BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[1].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                Graphics2D g2d = grayscaleImage.createGraphics();
+                g2d.drawImage(player.equipedSpells[1].spell.sprite, 0, 0, null);
+                g2d.dispose();
+                gfx.drawImage(grayscaleImage, 340,685,  48, 48, null);
+            }
+        }
+        if(player.equipedSpells[2] != null) {
+            if(player.spellCooldowns[2].isAvailable())
+                gfx.drawImage(player.equipedSpells[2].spell.sprite, 420,685,  48, 48, null);
+            else {
+                BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[2].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                Graphics2D g2d = grayscaleImage.createGraphics();
+                g2d.drawImage(player.equipedSpells[2].spell.sprite, 0, 0, null);
+                g2d.dispose();
+                gfx.drawImage(grayscaleImage, 420,685,  48, 48, null);
+            }
+        }
+        if(player.equipedSpells[3] != null) {
+            if(player.spellCooldowns[3].isAvailable())
+                gfx.drawImage(player.equipedSpells[3].spell.sprite, 500,685,  48, 48, null);
+            else {
+                BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[3].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+                Graphics2D g2d = grayscaleImage.createGraphics();
+                g2d.drawImage(player.equipedSpells[3].spell.sprite, 0, 0, null);
+                g2d.dispose();
+                gfx.drawImage(grayscaleImage, 500,685,  48, 48, null);
+            }
+        }
+    }
     private void Draw()
     {
             /// Returnez bufferStrategy pentru canvasul existent
@@ -311,11 +411,11 @@ public class Game implements Runnable
             }
         }
             /// Se obtine contextul grafic curent in care se poate desena.
-        g = bs.getDrawGraphics();
-        GameObject.graphics = g;
-        editor.gfx = g;
+        gfx = bs.getDrawGraphics();
+        GameObject.graphics = gfx;
+        editor.gfx = gfx;
             /// Se sterge ce era
-        g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
+        gfx.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
 
 
 
@@ -342,13 +442,6 @@ public class Game implements Runnable
 
             editor.run();
 
-
-            g.setColor(Color.black);
-            g.drawRect(260, 685, 48, 48);
-            g.drawRect(340, 685, 48, 48);
-            g.drawRect(420, 685, 48, 48);
-            g.drawRect(500, 685, 48, 48);
-
             Player player = null;
             for (GameObject obj : GameObjectManager.getObjects()) {
                 if(obj instanceof Player) {
@@ -358,61 +451,10 @@ public class Game implements Runnable
             }
             if(player != null)
             {
-                if(player.equipedSpells[0] != null) {
-                    if(player.spellCooldowns[0].isAvailable())
-                        g.drawImage(player.equipedSpells[0].spell.sprite, 260,685,  48, 48, null);
-                    else {
-                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[0].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-                        Graphics2D g2d = grayscaleImage.createGraphics();
-                        g2d.drawImage(player.equipedSpells[0].spell.sprite, 0, 0, null);
-                        g2d.dispose();
-                        g.drawImage(grayscaleImage, 260,685,  48, 48, null);
-                    }
-                }
-                if(player.equipedSpells[1] != null) {
-                    if(player.spellCooldowns[1].isAvailable())
-                        g.drawImage(player.equipedSpells[1].spell.sprite, 340,685,  48, 48, null);
-                    else {
-                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[1].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-                        Graphics2D g2d = grayscaleImage.createGraphics();
-                        g2d.drawImage(player.equipedSpells[1].spell.sprite, 0, 0, null);
-                        g2d.dispose();
-                        g.drawImage(grayscaleImage, 340,685,  48, 48, null);
-                    }
-                }
-                if(player.equipedSpells[2] != null) {
-                    if(player.spellCooldowns[2].isAvailable())
-                        g.drawImage(player.equipedSpells[2].spell.sprite, 420,685,  48, 48, null);
-                    else {
-                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[2].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-                        Graphics2D g2d = grayscaleImage.createGraphics();
-                        g2d.drawImage(player.equipedSpells[2].spell.sprite, 0, 0, null);
-                        g2d.dispose();
-                        g.drawImage(grayscaleImage, 420,685,  48, 48, null);
-                    }
-                }
-                if(player.equipedSpells[3] != null) {
-                    if(player.spellCooldowns[3].isAvailable())
-                        g.drawImage(player.equipedSpells[3].spell.sprite, 500,685,  48, 48, null);
-                    else {
-                        BufferedImage grayscaleImage = new BufferedImage(player.equipedSpells[3].spell.sprite.getWidth(), player.equipedSpells[0].spell.sprite.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
-                        Graphics2D g2d = grayscaleImage.createGraphics();
-                        g2d.drawImage(player.equipedSpells[3].spell.sprite, 0, 0, null);
-                        g2d.dispose();
-                        g.drawImage(grayscaleImage, 500,685,  48, 48, null);
-                    }
-                }
-                g.setColor(Color.red);
-                g.fillRect(100, 630, (int) ((double)player.health / 50 * 600), 20);
-                g.setColor(Color.blue.brighter());
-
-                g.fillRect(100, 655, (int) ((double)player.health / 50 * 600), 20);
-                g.setColor(Color.black);
-                g.drawRect(100,630, 600, 20);
-                g.drawRect(100,655, 600, 20);
-                g.setFont(new Font("Comic Sans", Font.BOLD, 14));
-                g.drawString("Health: " + player.health, 350, 645);
-                g.drawString("Mana: " + player.health, 350, 670);
+                handleLevelTransition(player);
+                drawGUI(player);
+                drawPauseUI();
+                drawSaveSelect();
             }
 
             //g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
@@ -424,7 +466,79 @@ public class Game implements Runnable
 
             /// Elibereaza resursele de memorie aferente contextului grafic curent (zonele de memorie ocupate de
             /// elementele grafice ce au fost desenate pe canvas).
-        g.dispose();
+        gfx.dispose();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            isPaused = !isPaused;
+            if(isSaveSelect)
+                isPaused = false;
+            isSaveSelect = false;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if(isPaused) {
+            Rectangle saveRect = new Rectangle(300,200, 200, 50);
+            if(saveRect.contains(Mouse.getPosition())) {
+                System.out.println("Save Game");
+            }
+            Rectangle loadRect = new Rectangle(300,290, 200, 50);
+            if(loadRect.contains(Mouse.getPosition())) {
+                System.out.println("Load Game");
+                isPaused = false;
+                isSaveSelect = true;
+            }
+
+
+        }
+        else if(isSaveSelect) {
+            Rectangle slot1rect = new Rectangle(300,200, 200, 50);
+            if(slot1rect.contains(Mouse.getPosition())) {
+                System.out.println("Slot 1");
+            }
+            Rectangle slot2rect = new Rectangle(300,290, 200, 50);
+            if(slot2rect.contains(Mouse.getPosition())) {
+                System.out.println("Slot 2");
+            }
+            Rectangle slot3rect = new Rectangle(300,380, 200, 50);
+            if(slot3rect.contains(Mouse.getPosition())) {
+                System.out.println("Slot 3");
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
 

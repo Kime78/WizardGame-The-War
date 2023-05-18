@@ -20,6 +20,7 @@ public class Player extends GameObject {
     private final Cooldown zapSpell;
     public float speed = 2;
     public int health = 50;
+    public int mana = 50;
 
     public EquipableSpell[] equipedSpells = new EquipableSpell[4];
     public Cooldown[] spellCooldowns = new Cooldown[4];
@@ -45,8 +46,39 @@ public class Player extends GameObject {
         if(Keyboard.isKeyPressed(KeyEvent.VK_1)) {
             if(equipedSpells[0] != null) {
                 System.out.println("asdasd");
-                if(spellCooldowns[0].isAvailable()) {
+                if(spellCooldowns[0].isAvailable() && mana >= 10) {
+                    mana -= 10;
                     spellCooldowns[0].use();
+                    System.out.println("asdasd2");
+                }
+            }
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_2)) {
+            if(equipedSpells[1] != null) {
+                System.out.println("asdasd");
+                if(spellCooldowns[1].isAvailable() && mana >= 10) {
+                    mana -= 10;
+                    spellCooldowns[1].use();
+                    System.out.println("asdasd2");
+                }
+            }
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_3)) {
+            if(equipedSpells[2] != null) {
+                System.out.println("asdasd");
+                if(spellCooldowns[2].isAvailable() && mana >= 10) {
+                    mana -= 10;
+                    spellCooldowns[2].use();
+                    System.out.println("asdasd2");
+                }
+            }
+        }
+        if(Keyboard.isKeyPressed(KeyEvent.VK_4)) {
+            if(equipedSpells[3] != null) {
+                System.out.println("asdasd");
+                if(spellCooldowns[3].isAvailable() && mana >= 10) {
+                    mana -= 10;
+                    spellCooldowns[3].use();
                     System.out.println("asdasd2");
                 }
             }
