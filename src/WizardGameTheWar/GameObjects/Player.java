@@ -1,6 +1,7 @@
 package WizardGameTheWar.GameObjects;
 
 import WizardGameTheWar.Cooldown;
+import WizardGameTheWar.GameObjects.Enemies.Enemy;
 import WizardGameTheWar.GameObjects.Obstacles.Obstacle;
 import WizardGameTheWar.GameObjects.Spells.*;
 import WizardGameTheWar.Graphics.Assets;
@@ -16,11 +17,17 @@ import java.util.ArrayList;
  * Aceasta clasa se ocupa de jucator
  */
 public class Player extends GameObject {
-    private ArrayList<PlayerPositionObserver> observers = new ArrayList<>();
+    private final ArrayList<PlayerPositionObserver> observers = new ArrayList<>();
     private final Cooldown zapSpell;
     public float speed = 2;
     public int health = 50;
     public int mana = 50;
+    public Cooldown iframes = new Cooldown(500);
+    public Cooldown manaRegen = new Cooldown(1500);
+    public Cooldown healthRegen = new Cooldown(4000);
+    public int maxMana = 50;
+    public int maxHealth = 50;
+
 
     public EquipableSpell[] equipedSpells = new EquipableSpell[4];
     public Cooldown[] spellCooldowns = new Cooldown[4];
@@ -35,14 +42,45 @@ public class Player extends GameObject {
         spellCooldowns[2] = new Cooldown(6000);
         spellCooldowns[3] = new Cooldown(6000);
     }
-    @Override
     /***
      * Metoda se ocupa cu verificarea inputului(mouse, tastatura), si verifica coliziuni
      */
+    @Override
     public void update() {
         int deltaX = 0;
         int deltaY = 0;
+        if(healthRegen.isAvailable()) {
+            healthRegen.use();
+            if(health < maxHealth)
+                health++;
+        }
+        if(manaRegen.isAvailable()) {
+            manaRegen.use();
+            if(mana < maxMana)
+                mana++;
+        }
+        for(GameObject obj : GameObjectManager.getObjects()) {
+            if(obj instanceof Enemy) {
+                if(this.collidesWith(obj))
+                    if(iframes.isAvailable()) {
+                        iframes.use();
+                        health--;
+                    }
 
+            }
+            if(obj instanceof Spell)
+            {
+                if(((Spell) obj).targetType == SpellTarget.Player) {
+                    if(this.collidesWith(obj)) {
+                        if(iframes.isAvailable()) {
+                            iframes.use();
+                            health--;
+                        }
+                        GameObjectManager.despawn(obj);
+                    }
+                }
+            }
+        }
         if(Keyboard.isKeyPressed(KeyEvent.VK_1)) {
             if(equipedSpells[0] != null) {
                 System.out.println("asdasd");
