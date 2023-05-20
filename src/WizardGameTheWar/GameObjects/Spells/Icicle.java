@@ -30,6 +30,7 @@ public class Icicle extends Spell {
         float dy = target.y - y;
         double angle = Math.atan2(dy, dx) + Math.toRadians(90);
         sprite = rotateToAngle(sprite, angle);
+        name = "Icicle";
     }
 
     @Override

@@ -40,8 +40,6 @@ public class Enemy extends GameObject {
                 }
             }
         }
-        if(x < 0 || x > 816 - 48 || y < 0 || y > 628 - 48)
-            return false;
-        return true;
+        return x >= 0 && x <= 816 - 48 && y >= 0 && y <= 628 - 48;
     }
 }

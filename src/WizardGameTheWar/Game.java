@@ -35,7 +35,10 @@ public class Game implements Runnable, MouseListener, KeyListener
     private final ArrayList<Level> levels = new ArrayList<>();
     private Level loadedLevel;
     private boolean isPaused = false;
-    private boolean isSaveSelect = false;
+    private boolean isSaveLoadSelect = false;
+    private boolean isSaveWriteSelect = false;
+    private Player currentPlayer;
+    
     LevelEditor editor = new LevelEditor();
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
@@ -101,7 +104,7 @@ public class Game implements Runnable, MouseListener, KeyListener
             System.exit(-1);
         }
 
-        int x = 59;
+        int x = 0;
         backgrounds = levels.get(x).backgrounds;
         changeLevel(levels.get(x), 3);
         Mouse.canvas = wnd.GetCanvas();
@@ -143,7 +146,7 @@ public class Game implements Runnable, MouseListener, KeyListener
             if((curentTime - oldTime) > timeFrame)
             {
                 /// Actualizeaza pozitiile elementelor
-                if(!isPaused && !isSaveSelect)
+                if(!isPaused && !isSaveLoadSelect && !isSaveWriteSelect)
                     Update();
                 /// Deseneaza elementele grafica in fereastra.
                 Draw();
@@ -160,16 +163,13 @@ public class Game implements Runnable, MouseListener, KeyListener
      */
     private void changeLevel(Level lev, int dir) {
         loadedLevel = lev;
+        Player tmp = null;
         for(GameObject object : GameObjectManager.getObjects()) {
             GameObjectManager.despawn(object);
         }
         GameObjectManager.updateObjects();
         backgrounds = lev.backgrounds;
-        Player tmp = null;
-        for (GameObject obj : GameObjectManager.getObjects()) {
-            if(obj instanceof Player)
-                GameObjectManager.despawn(obj);
-        }
+
         if(dir == 1) {
             tmp = new Player(816 / 2, 48 + 5);
         }
@@ -182,8 +182,13 @@ public class Game implements Runnable, MouseListener, KeyListener
         else if(dir == 4) {
             tmp = new Player(816 - 48 * 2 - 5, 624 / 2 + 5);
         }
-
-
+        if(currentPlayer != null) {
+            tmp.health = currentPlayer.health;
+            tmp.mana = currentPlayer.mana;
+            tmp.equipedSpells = currentPlayer.equipedSpells;
+            tmp.spellCooldowns = currentPlayer.spellCooldowns;
+        }
+        currentPlayer = tmp;
         GameObjectManager.player = tmp;
         GameObjectManager.spawn(tmp);
         for(GameObject object : lev.objects) {
@@ -250,9 +255,13 @@ public class Game implements Runnable, MouseListener, KeyListener
         Metoda este declarata privat deoarece trebuie apelata doar in metoda run()
      */
     private void Update()  {
+
         GameObjectManager.updateObjects();
         for(GameObject gameObject : GameObjectManager.getObjects()) {
             gameObject.update();
+            if(gameObject instanceof Player) {
+                currentPlayer = (Player) gameObject;
+            }
         }
         //System.out.println(loadedLevel.id);
         for(GameObject obj : GameObjectManager.getObjects()) {
@@ -299,10 +308,10 @@ public class Game implements Runnable, MouseListener, KeyListener
      */
     private void drawGUI(Player player) {
         gfx.setColor(Color.red);
-        gfx.fillRect(100, 630, (int) ((double)player.health / 50 * 600), 20);
+        gfx.fillRect(100, 630, (int) ((double)player.health / player.maxHealth * 600), 20);
         gfx.setColor(Color.blue.brighter());
 
-        gfx.fillRect(100, 655, (int) ((double)player.mana / 50 * 600), 20);
+        gfx.fillRect(100, 655, (int) ((double)player.mana / player.maxMana * 600), 20);
         gfx.setColor(Color.black);
         gfx.drawRect(100,630, 600, 20);
         gfx.drawRect(100,655, 600, 20);
@@ -329,8 +338,8 @@ public class Game implements Runnable, MouseListener, KeyListener
             gfx.drawString("Load Game", 345, 320);
         }
     }
-    private void drawSaveSelect() {
-        if(isSaveSelect) {
+    private void drawSaveLoadSelect() {
+        if(isSaveLoadSelect) {
             gfx.setColor(Color.white);
             gfx.fillRect(200,100, 400, 400);
             gfx.setColor(Color.black);
@@ -344,7 +353,22 @@ public class Game implements Runnable, MouseListener, KeyListener
             gfx.drawString("Slot 3", 345, 410);
         }
     }
-    private void handleLevelTransition(Player player) {
+    private void drawSaveWriteSelect() {
+        if(isSaveWriteSelect) {
+            gfx.setColor(Color.white);
+            gfx.fillRect(200,100, 400, 400);
+            gfx.setColor(Color.black);
+            gfx.setFont(new Font("Comic Sans", Font.BOLD, 20));
+            gfx.drawString("Select a save slot", 330, 120);
+            gfx.drawRect(300,200, 200, 50);
+            gfx.drawString("Slot 1", 345, 235);
+            gfx.drawRect(300,290, 200, 50);
+            gfx.drawString("Slot 2", 345, 320);
+            gfx.drawRect(300,380, 200, 50);
+            gfx.drawString("Slot 3", 345, 410);
+        }
+    }
+    private void drawSpellUI(Player player) {
         if(player.equipedSpells[0] != null) {
             if(player.spellCooldowns[0].isAvailable())
                 gfx.drawImage(player.equipedSpells[0].spell.sprite, 260,685,  48, 48, null);
@@ -451,10 +475,11 @@ public class Game implements Runnable, MouseListener, KeyListener
             }
             if(player != null)
             {
-                handleLevelTransition(player);
+                drawSpellUI(player);
                 drawGUI(player);
                 drawPauseUI();
-                drawSaveSelect();
+                drawSaveLoadSelect();
+                drawSaveWriteSelect();
             }
 
             //g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
@@ -478,9 +503,11 @@ public class Game implements Runnable, MouseListener, KeyListener
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             isPaused = !isPaused;
-            if(isSaveSelect)
+            if(isSaveLoadSelect || isSaveWriteSelect)
                 isPaused = false;
-            isSaveSelect = false;
+            isSaveWriteSelect = false;
+            isSaveLoadSelect = false;
+
         }
     }
 
@@ -495,28 +522,56 @@ public class Game implements Runnable, MouseListener, KeyListener
             Rectangle saveRect = new Rectangle(300,200, 200, 50);
             if(saveRect.contains(Mouse.getPosition())) {
                 System.out.println("Save Game");
+                isPaused = false;
+                isSaveWriteSelect = true;
             }
             Rectangle loadRect = new Rectangle(300,290, 200, 50);
             if(loadRect.contains(Mouse.getPosition())) {
                 System.out.println("Load Game");
                 isPaused = false;
-                isSaveSelect = true;
+                isSaveLoadSelect = true;
             }
 
 
         }
-        else if(isSaveSelect) {
+        else if(isSaveLoadSelect) {
             Rectangle slot1rect = new Rectangle(300,200, 200, 50);
             if(slot1rect.contains(Mouse.getPosition())) {
-                System.out.println("Slot 1");
+                Save save = SaveManager.loadSaveFromDB(0);
+                changeLevel(levels.get(save.currentLevel - 1), 1);
+                currentPlayer = save.player;
+                isSaveLoadSelect = false;
             }
             Rectangle slot2rect = new Rectangle(300,290, 200, 50);
             if(slot2rect.contains(Mouse.getPosition())) {
-                System.out.println("Slot 2");
+                Save save = SaveManager.loadSaveFromDB(1);
+                changeLevel(levels.get(save.currentLevel - 1), 1);
+                currentPlayer = save.player;
+                isSaveLoadSelect = false;
             }
             Rectangle slot3rect = new Rectangle(300,380, 200, 50);
             if(slot3rect.contains(Mouse.getPosition())) {
-                System.out.println("Slot 3");
+                Save save = SaveManager.loadSaveFromDB(2);
+                changeLevel(levels.get(save.currentLevel - 1), 1);
+                currentPlayer = save.player;
+                isSaveLoadSelect = false;
+            }
+        }
+        else if(isSaveWriteSelect) {
+            Rectangle slot1rect = new Rectangle(300,200, 200, 50);
+            if(slot1rect.contains(Mouse.getPosition())) {
+                SaveManager.writeSaveToDB(currentPlayer, 0, loadedLevel.id);
+                isSaveWriteSelect = false;
+            }
+            Rectangle slot2rect = new Rectangle(300,290, 200, 50);
+            if(slot2rect.contains(Mouse.getPosition())) {
+                SaveManager.writeSaveToDB(currentPlayer, 1, loadedLevel.id);
+                isSaveWriteSelect = false;
+            }
+            Rectangle slot3rect = new Rectangle(300,380, 200, 50);
+            if(slot3rect.contains(Mouse.getPosition())) {
+                SaveManager.writeSaveToDB(currentPlayer, 2, loadedLevel.id);
+                isSaveWriteSelect = false;
             }
         }
     }

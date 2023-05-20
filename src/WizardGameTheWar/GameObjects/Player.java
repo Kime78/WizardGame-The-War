@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /***
  * Aceasta clasa se ocupa de jucator
@@ -20,6 +21,7 @@ public class Player extends GameObject {
     private final ArrayList<PlayerPositionObserver> observers = new ArrayList<>();
     private final Cooldown zapSpell;
     public float speed = 2;
+
     public int health = 50;
     public int mana = 50;
     public Cooldown iframes = new Cooldown(500);

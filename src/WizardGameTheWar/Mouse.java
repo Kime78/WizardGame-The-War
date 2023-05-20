@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Mouse extends MouseAdapter {
-    // <https://stackoverflow.com/a/69120392>
     public static Canvas canvas;
     private static final Map<Integer, Boolean> pressedButtons = new HashMap<>();
 

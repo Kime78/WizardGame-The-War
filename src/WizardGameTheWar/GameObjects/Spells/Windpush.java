@@ -28,7 +28,8 @@ public class Windpush extends Spell {
         float dx = target.x - x;
         float dy = target.y - y;
         double angle = Math.atan2(dy, dx) + Math.toRadians(90);
-        sprite = rotateToAngle(sprite, angle);;
+        sprite = rotateToAngle(sprite, angle);
+        name = "WindPush";
     }
 
     @Override

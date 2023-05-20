@@ -31,6 +31,7 @@ public class Zap extends Spell {
         double angle = Math.atan2(dy, dx) + Math.toRadians(90);
 
         sprite = rotateToAngle(sprite, angle);
+        name = "Zap";
     }
 
     @Override

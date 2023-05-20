@@ -28,7 +28,7 @@ public class Zalmoxis extends Enemy implements PlayerPositionObserver {
 
     public Zalmoxis(int x, int y) {
         //FIXME: This is just a carbon copy of the wolf enemy.
-        sprite = Assets.map2boss;
+        sprite = Assets.map3boss;
         this.x = x;
         this.y = y;
         health = 200;

@@ -206,21 +206,21 @@ public class LevelEditor implements KeyListener, MouseListener {
     }
     private void save() throws IOException {
         System.out.println("Saved");
-        String levelString = "id ";
+        StringBuilder levelString = new StringBuilder("id ");
         switch (selectedLevel) {
-            case Campie: levelString += "Campie "; break;
-            case Padure: levelString += "Padure "; break;
-            case Pestera: levelString += "Pestera "; break;
+            case Campie: levelString.append("Campie "); break;
+            case Padure: levelString.append("Padure "); break;
+            case Pestera: levelString.append("Pestera "); break;
         }
-        levelString += obstaclesToBeAdded.size() + " ";
+        levelString.append(obstaclesToBeAdded.size()).append(" ");
         for(GameObject obstacle : obstaclesToBeAdded) {
-            levelString += obstacle.x / 48 + " " + obstacle.y / 48 + " ";
+            levelString.append(obstacle.x / 48).append(" ").append(obstacle.y / 48).append(" ");
         }
-        levelString += enemiesToBeAdded.size() + " ";
+        levelString.append(enemiesToBeAdded.size()).append(" ");
         for(Enemy enemy : enemiesToBeAdded) {
-            levelString += enemy.name + " " + enemy.x / 48 + " " + enemy.y / 48 + " ";
+            levelString.append(enemy.name).append(" ").append(enemy.x / 48).append(" ").append(enemy.y / 48).append(" ");
         }
-        levelString += "id1 id2 id3 id4";
+        levelString.append("id1 id2 id3 id4");
         System.out.println(levelString);
         BufferedWriter out = new BufferedWriter(new FileWriter("level1.txt", true));
         out.write(levelString + "\n");
