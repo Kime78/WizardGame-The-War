@@ -85,41 +85,86 @@ public class Player extends GameObject {
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_1)) {
             if(equipedSpells[0] != null) {
-                System.out.println("asdasd");
+
                 if(spellCooldowns[0].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[0].use();
-                    System.out.println("asdasd2");
+                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    double angleStep = Math.toRadians(15);
+
+                    for (int i = 0; i < 9; i++) {
+                        double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
+                        double dx = Math.cos(angle);
+                        double dy = Math.sin(angle);
+
+                        int targetX = (int) (x + dx * 500);
+                        int targetY = (int) (y + dy * 500);
+
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                    }
                 }
             }
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_2)) {
             if(equipedSpells[1] != null) {
-                System.out.println("asdasd");
                 if(spellCooldowns[1].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[1].use();
-                    System.out.println("asdasd2");
+                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    double angleStep = Math.toRadians(15);
+
+                    for (int i = 0; i < 9; i++) {
+                        double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
+                        double dx = Math.cos(angle);
+                        double dy = Math.sin(angle);
+
+                        int targetX = (int) (x + dx * 500);
+                        int targetY = (int) (y + dy * 500);
+
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                    }
                 }
             }
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_3)) {
             if(equipedSpells[2] != null) {
-                System.out.println("asdasd");
                 if(spellCooldowns[2].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[2].use();
-                    System.out.println("asdasd2");
+                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    double angleStep = Math.toRadians(15);
+
+                    for (int i = 0; i < 9; i++) {
+                        double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
+                        double dx = Math.cos(angle);
+                        double dy = Math.sin(angle);
+
+                        int targetX = (int) (x + dx * 500);
+                        int targetY = (int) (y + dy * 500);
+
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                    }
                 }
             }
         }
         if(Keyboard.isKeyPressed(KeyEvent.VK_4)) {
             if(equipedSpells[3] != null) {
-                System.out.println("asdasd");
                 if(spellCooldowns[3].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[3].use();
-                    System.out.println("asdasd2");
+                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    double angleStep = Math.toRadians(15);
+
+                    for (int i = 0; i < 9; i++) {
+                        double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
+                        double dx = Math.cos(angle);
+                        double dy = Math.sin(angle);
+
+                        int targetX = (int) (x + dx * 500);
+                        int targetY = (int) (y + dy * 500);
+
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                    }
                 }
             }
         }

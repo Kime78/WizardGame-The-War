@@ -6,9 +6,11 @@ import WizardGameTheWar.GameObjects.Obstacles.Obstacle;
 import WizardGameTheWar.GameObjects.Player;
 import WizardGameTheWar.GameObjects.Spells.EquipableSpell;
 import WizardGameTheWar.GameObjects.Spells.SpellFactory;
+import WizardGameTheWar.GameObjects.Spells.SpellTarget;
 import WizardGameTheWar.Levels.Level;
 import WizardGameTheWar.Levels.LevelLoader;
 
+import java.awt.*;
 import java.sql.*;
 import java.util.Objects;
 
@@ -73,25 +75,25 @@ public class SaveManager
             player.health = health;
             player.maxHealth = max_health;
             if(!Objects.equals(equipedSpell1Name, "null")) {
-                player.equipedSpells[0] = new EquipableSpell(SpellFactory.createSpell(equipedSpell1Name, 0, 0), equipedSpell1Level);
+                player.equipedSpells[0] = new EquipableSpell(SpellFactory.createSpell(equipedSpell1Name, 0, 0, new Point(), SpellTarget.Enemy), equipedSpell1Level);
             }
             else
                 player.equipedSpells[0] = null;
 
             if(!Objects.equals(equipedSpell2Name, "null")) {
-                player.equipedSpells[1] = new EquipableSpell(SpellFactory.createSpell(equipedSpell2Name, 0, 0), equipedSpell2Level);
+                player.equipedSpells[1] = new EquipableSpell(SpellFactory.createSpell(equipedSpell2Name, 0, 0, new Point(), SpellTarget.Enemy), equipedSpell2Level);
             }
             else
                 player.equipedSpells[1] = null;
 
             if(!Objects.equals(equipedSpell3Name, "null")) {
-                player.equipedSpells[2] = new EquipableSpell(SpellFactory.createSpell(equipedSpell3Name, 0, 0), equipedSpell3Level);
+                player.equipedSpells[2] = new EquipableSpell(SpellFactory.createSpell(equipedSpell3Name, 0, 0, new Point(), SpellTarget.Enemy), equipedSpell3Level);
             }
             else
                 player.equipedSpells[2] = null;
 
             if(!Objects.equals(equipedSpell4Name, "null")) {
-                player.equipedSpells[3] = new EquipableSpell(SpellFactory.createSpell(equipedSpell4Name, 0, 0), equipedSpell4Level);
+                player.equipedSpells[3] = new EquipableSpell(SpellFactory.createSpell(equipedSpell4Name, 0, 0, new Point(), SpellTarget.Enemy), equipedSpell4Level);
             }
             else
                 player.equipedSpells[3] = null;
