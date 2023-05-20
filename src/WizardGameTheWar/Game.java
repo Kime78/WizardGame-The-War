@@ -38,6 +38,7 @@ public class Game implements Runnable, MouseListener, KeyListener
     private boolean isSaveLoadSelect = false;
     private boolean isSaveWriteSelect = false;
     private Player currentPlayer;
+    private boolean isOver = false;
     
     LevelEditor editor = new LevelEditor();
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
@@ -146,7 +147,7 @@ public class Game implements Runnable, MouseListener, KeyListener
             if((curentTime - oldTime) > timeFrame)
             {
                 /// Actualizeaza pozitiile elementelor
-                if(!isPaused && !isSaveLoadSelect && !isSaveWriteSelect)
+                if(!isPaused && !isSaveLoadSelect && !isSaveWriteSelect && !isOver)
                     Update();
                 /// Deseneaza elementele grafica in fereastra.
                 Draw();
@@ -187,6 +188,8 @@ public class Game implements Runnable, MouseListener, KeyListener
             tmp.mana = currentPlayer.mana;
             tmp.equipedSpells = currentPlayer.equipedSpells;
             tmp.spellCooldowns = currentPlayer.spellCooldowns;
+            tmp.manaRegen = currentPlayer.manaRegen;
+            tmp.healthRegen = currentPlayer.healthRegen;
         }
         currentPlayer = tmp;
         GameObjectManager.player = tmp;
@@ -262,6 +265,10 @@ public class Game implements Runnable, MouseListener, KeyListener
             if(gameObject instanceof Player) {
                 currentPlayer = (Player) gameObject;
             }
+        }
+        if(currentPlayer.health <= 0) {
+            currentPlayer.health = 0;
+            isOver = true;
         }
         //System.out.println(loadedLevel.id);
         for(GameObject obj : GameObjectManager.getObjects()) {
@@ -480,6 +487,11 @@ public class Game implements Runnable, MouseListener, KeyListener
                 drawPauseUI();
                 drawSaveLoadSelect();
                 drawSaveWriteSelect();
+            }
+            if(isOver) {
+                gfx.setColor(Color.white);
+                gfx.setFont(new Font("Comic Sans", Font.BOLD, 40));
+                gfx.drawString("GAME OVER", 300, 300);
             }
 
             //g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);

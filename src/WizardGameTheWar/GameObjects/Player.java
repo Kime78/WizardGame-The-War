@@ -24,9 +24,9 @@ public class Player extends GameObject {
 
     public int health = 50;
     public int mana = 50;
-    public Cooldown iframes = new Cooldown(500);
-    public Cooldown manaRegen = new Cooldown(1500);
-    public Cooldown healthRegen = new Cooldown(4000);
+    public Cooldown iframes = new Cooldown(200);
+    public Cooldown manaRegen = new Cooldown(2500);
+    public Cooldown healthRegen = new Cooldown(6000);
     public int maxMana = 50;
     public int maxHealth = 50;
 
