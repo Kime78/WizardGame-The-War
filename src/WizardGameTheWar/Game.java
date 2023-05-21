@@ -1,6 +1,12 @@
 package WizardGameTheWar;
 
 import WizardGameTheWar.GameObjects.Backgrounds.Background;
+import WizardGameTheWar.GameObjects.Items.HealingPotion;
+import WizardGameTheWar.GameObjects.Items.ManaPotion;
+import WizardGameTheWar.GameObjects.Items.SpellPickup;
+import WizardGameTheWar.GameObjects.Spells.EquipableSpell;
+import WizardGameTheWar.GameObjects.Spells.Fireball;
+import WizardGameTheWar.GameObjects.Spells.SpellTarget;
 import WizardGameTheWar.GameWindow.GameWindow;
 import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.GameObjects.*;
@@ -112,10 +118,10 @@ public class Game implements Runnable, MouseListener, KeyListener
         Mouse.addMouseListener();
         editor.wnd = wnd;
         editor.init();
-        //Level l = SaveManager.loadSaveFromDB();
-        //SaveManager.writeLevelToDB(l);
         wnd.GetCanvas().addKeyListener(this);
         wnd.GetCanvas().addMouseListener(this);
+
+        GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Fireball(0,0, new Point(), SpellTarget.Enemy), 5), 200, 200));
     }
 
     /*! \fn public void run()

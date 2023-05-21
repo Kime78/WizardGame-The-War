@@ -88,10 +88,11 @@ public class Player extends GameObject {
                 if(spellCooldowns[0].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[0].use();
-                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    int bulletCount = equipedSpells[0].level + 3;
+                    double startAngle = Math.toRadians(-15 * (bulletCount - 1) / 2);
                     double angleStep = Math.toRadians(15);
 
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < bulletCount; i++) {
                         double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
                         double dx = Math.cos(angle);
                         double dy = Math.sin(angle);
@@ -109,10 +110,11 @@ public class Player extends GameObject {
                 if(spellCooldowns[1].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[1].use();
-                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    int bulletCount = equipedSpells[1].level + 3;
+                    double startAngle = Math.toRadians(-15 * (bulletCount - 1) / 2);
                     double angleStep = Math.toRadians(15);
 
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < bulletCount; i++) {
                         double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
                         double dx = Math.cos(angle);
                         double dy = Math.sin(angle);
@@ -130,10 +132,11 @@ public class Player extends GameObject {
                 if(spellCooldowns[2].isAvailable() && mana >= 10) {
                     mana -= 10;
                     spellCooldowns[2].use();
-                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    int bulletCount = equipedSpells[2].level + 3;
+                    double startAngle = Math.toRadians(-15 * (bulletCount - 1) / 2);
                     double angleStep = Math.toRadians(15);
 
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < bulletCount; i++) {
                         double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
                         double dx = Math.cos(angle);
                         double dy = Math.sin(angle);
@@ -150,11 +153,12 @@ public class Player extends GameObject {
             if(equipedSpells[3] != null) {
                 if(spellCooldowns[3].isAvailable() && mana >= 10) {
                     mana -= 10;
+                    int bulletCount = equipedSpells[3].level + 3;
                     spellCooldowns[3].use();
-                    double startAngle = Math.toRadians(-15 * (9 - 1) / 2);
+                    double startAngle = Math.toRadians(-15 * (bulletCount - 1) / 2);
                     double angleStep = Math.toRadians(15);
 
-                    for (int i = 0; i < 9; i++) {
+                    for (int i = 0; i < bulletCount; i++) {
                         double angle = startAngle + i * angleStep +  Math.atan2(Mouse.getPosition().y - y, Mouse.getPosition().x - x);
                         double dx = Math.cos(angle);
                         double dy = Math.sin(angle);

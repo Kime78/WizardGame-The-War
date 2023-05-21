@@ -52,9 +52,6 @@ public class Assets
     public static BufferedImage map2boss;
     public static BufferedImage map3boss;
 
-
-
-
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
 
