@@ -12,7 +12,7 @@ import WizardGameTheWar.GameObjects.Spells.SpellTarget;
 import java.awt.*;
 
 public class Enemy extends GameObject {
-    protected int health;
+    public int health;
     public String name;
     @Override
     public void update() {

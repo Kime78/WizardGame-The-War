@@ -19,9 +19,14 @@ import java.util.Random;
 
 public class GameObjectManager {
     static ArrayList<GameObject> objects;
+    private static boolean changeLevel = false;
     static Queue<GameObject> toBeSpawned;
     static Queue<GameObject> toBeDespawned;
     public static Player player;
+
+    public static void setChangeLevel(boolean changeLevel1) {
+        changeLevel = changeLevel1;
+    }
     public static void init() {
         objects = new ArrayList<>();
         toBeSpawned = new LinkedList<>();
@@ -55,7 +60,8 @@ public class GameObjectManager {
 //                }
 //            }
 //        }
-        if(o instanceof Enemy) {
+        if(o instanceof Enemy && !changeLevel) {
+            //Thread.dumpStack();
             int rng = new Random().nextInt(100);
             if(rng < 10) {
                 int rng2 = new Random().nextInt(100);

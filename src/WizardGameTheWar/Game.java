@@ -1,6 +1,7 @@
 package WizardGameTheWar;
 
 import WizardGameTheWar.GameObjects.Backgrounds.Background;
+import WizardGameTheWar.GameObjects.Enemies.Enemy;
 import WizardGameTheWar.GameObjects.Items.HealingPotion;
 import WizardGameTheWar.GameObjects.Items.ManaPotion;
 import WizardGameTheWar.GameObjects.Items.SpellPickup;
@@ -171,10 +172,12 @@ public class Game implements Runnable, MouseListener, KeyListener
     private void changeLevel(Level lev, int dir) {
         loadedLevel = lev;
         Player tmp = null;
+        GameObjectManager.setChangeLevel(true);
         for(GameObject object : GameObjectManager.getObjects()) {
             GameObjectManager.despawn(object);
         }
         GameObjectManager.updateObjects();
+        GameObjectManager.setChangeLevel(false);
         backgrounds = lev.backgrounds;
 
         if(dir == 1) {
@@ -201,7 +204,15 @@ public class Game implements Runnable, MouseListener, KeyListener
         GameObjectManager.player = tmp;
         GameObjectManager.spawn(tmp);
         for(GameObject object : lev.objects) {
-            GameObjectManager.spawn(object);
+            if(object instanceof Enemy) {
+                if(((Enemy) object).health > 0) {
+                    GameObjectManager.spawn(object);
+                }
+            }
+            else {
+                GameObjectManager.spawn(object);
+            }
+
         }
         for(GameObject object : lev.rim) {
             GameObjectManager.spawn(object);
