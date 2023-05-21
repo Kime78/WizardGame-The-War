@@ -121,7 +121,7 @@ public class Game implements Runnable, MouseListener, KeyListener
         wnd.GetCanvas().addKeyListener(this);
         wnd.GetCanvas().addMouseListener(this);
 
-        GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Fireball(0,0, new Point(), SpellTarget.Enemy), 5), 200, 200));
+
     }
 
     /*! \fn public void run()

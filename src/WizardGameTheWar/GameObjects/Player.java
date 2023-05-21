@@ -24,7 +24,7 @@ public class Player extends GameObject {
     public int health = 50;
     public int mana = 50;
     public Cooldown iframes = new Cooldown(200);
-    public Cooldown manaRegen = new Cooldown(2500);
+    public Cooldown manaRegen = new Cooldown(2000);
     public Cooldown healthRegen = new Cooldown(6000);
     public int maxMana = 50;
     public int maxHealth = 50;
@@ -122,7 +122,7 @@ public class Player extends GameObject {
                         int targetX = (int) (x + dx * 500);
                         int targetY = (int) (y + dy * 500);
 
-                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[1].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
                     }
                 }
             }
@@ -144,7 +144,7 @@ public class Player extends GameObject {
                         int targetX = (int) (x + dx * 500);
                         int targetY = (int) (y + dy * 500);
 
-                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[2].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
                     }
                 }
             }
@@ -166,7 +166,7 @@ public class Player extends GameObject {
                         int targetX = (int) (x + dx * 500);
                         int targetY = (int) (y + dy * 500);
 
-                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[0].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
+                        GameObjectManager.spawn(SpellFactory.createSpell(equipedSpells[3].spell.name, x, y, new Point(targetX, targetY), SpellTarget.Enemy));
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class Player extends GameObject {
         }
         if(Mouse.isButtonPressed(MouseEvent.BUTTON1)) {
             if(zapSpell.isAvailable()) {
-                GameObjectManager.spawn(new ManaFireBall(this.x, this.y, Mouse.getPosition(), SpellTarget.Enemy));
+                GameObjectManager.spawn(new Zap(this.x, this.y, Mouse.getPosition(), SpellTarget.Enemy));
                 zapSpell.use();
             }
         }

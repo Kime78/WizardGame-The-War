@@ -1,11 +1,17 @@
 package WizardGameTheWar.GameObjects;
 
+import WizardGameTheWar.GameObjects.Enemies.Enemy;
 import WizardGameTheWar.GameObjects.Enemies.TreeMonster;
+import WizardGameTheWar.GameObjects.Items.HealingPotion;
+import WizardGameTheWar.GameObjects.Items.ManaPotion;
+import WizardGameTheWar.GameObjects.Items.SpellPickup;
+import WizardGameTheWar.GameObjects.Spells.*;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 /***
  * Aceasta clasa se ocupa cu Managementul tuturor obiectelor din joc, adica aparitia si disparitia lor
@@ -49,6 +55,65 @@ public class GameObjectManager {
 //                }
 //            }
 //        }
+        if(o instanceof Enemy) {
+            int rng = new Random().nextInt(100);
+            if(rng < 10) {
+                int rng2 = new Random().nextInt(100);
+                if(rng2 < 40) {
+                    GameObjectManager.spawn(new HealingPotion(o.x, o.y));
+                }
+                if(rng2 >= 40 && rng2 < 80) {
+                    GameObjectManager.spawn(new ManaPotion(o.x, o.y));
+                }
+                else {
+                    int rng3 = new Random().nextInt(100);
+                    do {
+
+                        int rng4 = new Random().nextInt(10);
+                        int level = 0;
+                        if (rng4 < 4) {
+                            level = 1;
+                        } else if (rng4 < 6) {
+                            level = 2;
+                        } else if (rng4 < 8) {
+                            level = 3;
+                        } else if (rng4 < 9) {
+                            level = 4;
+                        }
+                        if (rng3 < 10) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Boulder(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        else if (rng3 < 20) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Fireball(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        else if (rng3 < 30) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Icicle(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        else if (rng3 < 40) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new ManaBullet(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        else if (rng3 < 50) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new ManaFireBall(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        else if (rng3 < 60) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Tornado(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        else if (rng3 < 70) {
+                            GameObjectManager.spawn(new SpellPickup(new EquipableSpell(new Windpush(0, 0, new Point(), SpellTarget.Enemy), level), o.x, o.y));
+                            break;
+                        }
+                        rng3 = new Random().nextInt(100);
+                    }
+                    while (rng3 < 70);
+                }
+            }
+        }
     }
 
     /**

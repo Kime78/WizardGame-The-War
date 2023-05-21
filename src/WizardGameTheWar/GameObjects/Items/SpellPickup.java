@@ -12,7 +12,7 @@ import java.awt.*;
 public class SpellPickup extends Item {
     public EquipableSpell equipableSpell;
     public int level;
-    private static int slot = 0;
+    private static int slot = 1;
     public SpellPickup(EquipableSpell spell, int x, int y) {
         this.x = x;
         this.equipableSpell = spell;
@@ -25,37 +25,37 @@ public class SpellPickup extends Item {
         switch (spell.spell.name) {
             case "Boulder": {
                 sprite = Assets.bookBoulder;
-                description = "Throws " + spell.level + 3 + " boulders towards your enemy";
+                description = "Throws " + (spell.level + 3) + " boulders towards your enemy";
                 break;
             }
             case "Fireball": {
                 sprite = Assets.bookFireBall;
-                description = "Throws " + spell.level + 3 + " fireballs towards your enemy";
+                description = "Throws " + (spell.level + 3) + " fireballs towards your enemy";
                 break;
             }
             case "Icicle": {
                 sprite = Assets.bookIcicle;
-                description = "Throws " + spell.level + 3 + " icicles towards your enemy";
+                description = "Throws " + (spell.level + 3) + " icicles towards your enemy";
                 break;
             }
             case "ManaBullet": {
                 sprite = Assets.bookManaBullet;
-                description = "Throws " + spell.level + 3 + " mana bullets towards your enemy";
+                description = "Throws " + (spell.level + 3) + " mana bullets towards your enemy";
                 break;
             }
             case "ManaFireBall": {
                 sprite = Assets.bookManaFireBall;
-                description = "Throws " + spell.level + 3 + " mana fireballs towards your enemy";
+                description = "Throws " + (spell.level + 3) + " mana fireballs towards your enemy";
                 break;
             }
             case "Tornado": {
                 sprite = Assets.bookTornado;
-                description = "Throws " + spell.level + 3 + " tornadoes towards your enemy";
+                description = "Throws " + (spell.level + 3) + " tornadoes towards your enemy";
                 break;
             }
             case "WindPush": {
                 sprite = Assets.bookWindPush;
-                description = "Throws " + spell.level + 3 + " gusts of wind towards your enemy";
+                description = "Throws " + (spell.level + 3) + " gusts of wind towards your enemy";
                 break;
             }
 
