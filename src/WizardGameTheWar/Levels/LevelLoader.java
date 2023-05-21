@@ -2,7 +2,8 @@ package WizardGameTheWar.Levels;
 
 import WizardGameTheWar.FactoryException;
 import WizardGameTheWar.GameObjects.Backgrounds.BackgroundFactory;
-import WizardGameTheWar.GameObjects.Enemies.EnemyFactory;
+import WizardGameTheWar.GameObjects.Enemies.Factories.EnemyFactory;
+import WizardGameTheWar.GameObjects.Enemies.Factories.EnemyFactoryCreator;
 import WizardGameTheWar.GameObjects.Obstacles.ObstacleFactory;
 
 public class LevelLoader {
@@ -56,7 +57,7 @@ public class LevelLoader {
                 int x = Integer.parseInt(parts[currentIndex++]);
                 int y = Integer.parseInt(parts[currentIndex++]);
 
-                level.objects.add(EnemyFactory.createEnemy(name, x * 48, y * 48));
+                level.objects.add(new EnemyFactoryCreator().createEnemyFactory(name, x * 48, y * 48));
             }
 
             level.links[0] = Integer.parseInt(parts[currentIndex++]);

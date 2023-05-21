@@ -12,7 +12,6 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /***
  * Aceasta clasa se ocupa de jucator
@@ -202,7 +201,7 @@ public class Player extends GameObject {
         this.y += deltaY;
 
         for(PlayerPositionObserver observer : observers) {
-            observer.updatePosition(new Point(x, y));
+            observer.update(new Point(x, y));
         }
     }
 

@@ -129,7 +129,7 @@ public class DarkWizard extends Enemy implements PlayerPositionObserver {
     }
 
     @Override
-    public void updatePosition(Point playerPosition) {
+    public void update(Point playerPosition) {
         playerPos = playerPosition;
     }
 }

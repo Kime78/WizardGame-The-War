@@ -3,7 +3,7 @@ package WizardGameTheWar.Levels;
 import WizardGameTheWar.GameObjects.Backgrounds.Background;
 import WizardGameTheWar.GameObjects.Backgrounds.BackgroundFactory;
 import WizardGameTheWar.GameObjects.Enemies.Enemy;
-import WizardGameTheWar.GameObjects.Enemies.EnemyFactory;
+import WizardGameTheWar.GameObjects.Enemies.Factories.EnemyFactoryCreator;
 import WizardGameTheWar.GameObjects.GameObject;
 import WizardGameTheWar.GameObjects.GameObjectManager;
 import WizardGameTheWar.GameObjects.Obstacles.Obstacle;
@@ -21,7 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LevelEditor implements KeyListener, MouseListener {
+public class LevelCreator implements KeyListener, MouseListener {
     public GameWindow wnd;
     public Graphics gfx;
     public boolean isEditing;
@@ -237,7 +237,8 @@ public class LevelEditor implements KeyListener, MouseListener {
                 obstaclesToBeAdded.add(obj);
             }
             else {
-                Enemy obj = EnemyFactory.createEnemy(selectedEnemy,(pos.x / 48) * 48, (pos.y / 48) * 48);
+
+                Enemy obj = new EnemyFactoryCreator().createEnemyFactory(selectedEnemy, (pos.x / 48) * 48, (pos.y / 48) * 48);
                 GameObjectManager.spawn(obj);
                 enemiesToBeAdded.add(obj);
             }

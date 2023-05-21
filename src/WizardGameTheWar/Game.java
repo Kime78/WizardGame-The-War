@@ -6,7 +6,7 @@ import WizardGameTheWar.Graphics.Assets;
 import WizardGameTheWar.GameObjects.*;
 import WizardGameTheWar.Levels.InvalidLevelException;
 import WizardGameTheWar.Levels.Level;
-import WizardGameTheWar.Levels.LevelEditor;
+import WizardGameTheWar.Levels.LevelCreator;
 import WizardGameTheWar.Levels.LevelLoader;
 
 import java.awt.*;
@@ -40,7 +40,7 @@ public class Game implements Runnable, MouseListener, KeyListener
     private Player currentPlayer;
     private boolean isOver = false;
     
-    LevelEditor editor = new LevelEditor();
+    LevelCreator editor = new LevelCreator();
     //private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
     /*! \fn public Game(String title, int width, int height)
